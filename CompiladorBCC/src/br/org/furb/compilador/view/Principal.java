@@ -9,6 +9,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import java.awt.ComponentOrientation;
 
 public class Principal extends JFrame {
 
@@ -47,6 +50,18 @@ public class Principal extends JFrame {
 		gbc_splitPane.gridx = 0;
 		gbc_splitPane.gridy = 1;
 		getContentPane().add(splitPane, gbc_splitPane);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		splitPane.setLeftComponent(scrollPane);
+		
+		JTextArea textArea = new JTextArea();
+		scrollPane.setViewportView(textArea);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		splitPane.setRightComponent(scrollPane_1);
+		
+		JTextArea textArea_1 = new JTextArea();
+		scrollPane_1.setViewportView(textArea_1);
 		
 		
 		
