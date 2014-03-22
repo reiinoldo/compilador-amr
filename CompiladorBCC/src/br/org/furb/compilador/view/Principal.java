@@ -12,6 +12,8 @@ import javax.swing.JSplitPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import java.awt.ComponentOrientation;
+import javax.swing.JLabel;
+import java.awt.FlowLayout;
 
 public class Principal extends JFrame {
 
@@ -22,9 +24,9 @@ public class Principal extends JFrame {
 		setLocationRelativeTo(null);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{784, 0};
-		gridBagLayout.rowHeights = new int[]{71, 0, 0};
+		gridBagLayout.rowHeights = new int[]{71, 467, 0, 0};
 		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
 		getContentPane().setLayout(gridBagLayout);
 		
 		JPanel panel = new JPanel();
@@ -62,6 +64,17 @@ public class Principal extends JFrame {
 		
 		JTextArea textArea_1 = new JTextArea();
 		scrollPane_1.setViewportView(textArea_1);
+		
+		JPanel panel_1 = new JPanel();
+		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.anchor = GridBagConstraints.SOUTHWEST;
+		gbc_panel_1.gridx = 0;
+		gbc_panel_1.gridy = 2;
+		getContentPane().add(panel_1, gbc_panel_1);
+		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 2));
+		
+		JLabel lblNewLabel = new JLabel("New label");
+		panel_1.add(lblNewLabel);
 		
 		
 		
