@@ -8,62 +8,77 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Element;
 
 public class Principal extends JFrame {
 
-	// decvar	
+	// decvar
 	private static final long serialVersionUID = -2529644283675445941L;
-	private String oldTextAreaCodigo = "";	
-	private JPanel panelPrincipal, panelStatus;
+	private JPanel panelStatus;
 	private JLabel lblStatus;
-	private JTextArea textAreaCodigo, textAreaMensagens; 
-	private JButton btnNovo, btnAbrir, btnSalvar, btnCopiar, btnColar, btnRecortar, btnCompilar, btnGerarCodigo, btnEquipe; 
-	
-	private void btnNovoEvt(){
-		oldTextAreaCodigo = "";
+	private JTextArea textAreaCodigo, textAreaMensagens;
+	private JButton btnNovo, btnAbrir, btnSalvar, btnCopiar, btnColar,
+			btnRecortar, btnCompilar, btnGerarCodigo, btnEquipe;
+	private String oldTextAreaCodigo;
+	private String pathFile;
+
+	private void btnNovoEvt() {
+		pathFile = null;
 		textAreaMensagens.setText("");
-        textAreaCodigo.setText("");
-        setStatusBar("Não modificado");        
+		textAreaCodigo.setText("");
+		lblStatus.setText("Não modificado");
 	}
-	
-	private void btnAbrirEvt(){
+
+	private void btnAbrirEvt() {
 		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+		fileChooser.setCurrentDirectory(new File(System
+				.getProperty("user.home")));
 		int result = fileChooser.showOpenDialog(this);
-		
+
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = fileChooser.getSelectedFile();
-		    panelPrincipal.setBorder(javax.swing.BorderFactory.createTitledBorder("Selected file: " + selectedFile.getAbsolutePath()));
-		    
-		    BufferedReader reader;
+			setTitle("Selected file: " + selectedFile.getAbsolutePath());
+			lblStatus.setText("Selected file: "
+					+ selectedFile.getAbsolutePath());
+			pathFile = selectedFile.getAbsolutePath();
+
+			BufferedReader reader;
 			try {
-				reader = new BufferedReader(new FileReader(selectedFile.toString()));
+				reader = new BufferedReader(new FileReader(
+						selectedFile.toString()));
 				String line = null;
-			    while ((line = reader.readLine()) != null) {
-			        textAreaCodigo.setText(textAreaCodigo.getText() + line + "\n");
-			    }
+				while ((line = reader.readLine()) != null) {
+					textAreaCodigo.setText(textAreaCodigo.getText() + line
+							+ "\n");
+				}
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -71,46 +86,119 @@ public class Principal extends JFrame {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		    
-		    
-		}		
-		setStatusBar("Não modificado");
+
+		}
+		lblStatus.setText("Não modificado");
 	}
-	
-	private void btnCompilarEvt(){
-		textAreaMensagens.setText("Compilação de programas ainda não foi implementada");            
+
+	private void setStatusBar() {
+		if (!textAreaCodigo.getText().equals(oldTextAreaCodigo)) {
+			lblStatus.setText("Modificado");
+		} else {
+			lblStatus.setText("Não modificado");
+		}
+		oldTextAreaCodigo = textAreaCodigo.getText();
 	}
-	
-	private void btnGerarCodigoEvt(){
-		textAreaMensagens.setText("Geração de código ainda não foi implementada");            
+
+	private void btnCompilarEvt() {
+		textAreaMensagens
+				.setText("Compilação de programas ainda não foi implementada");
 	}
-	
-	private void btnEquipeEvt(){
-		JOptionPane.showMessageDialog(null, "André Vinícius Bampi \n"
-											+ "Maicon Machado Gerardi da Silva \n"
-											+ "Reinoldo Krause Junior", "Equipe",1);
+
+	private void btnGerarCodigoEvt() {
+		textAreaMensagens
+				.setText("Geração de código ainda não foi implementada");
 	}
-	
-	private void setStatusBar(String pTipo){
-		if (pTipo == ""){
-			if (textAreaCodigo.getText() != oldTextAreaCodigo){
-				lblStatus.setText("Modificado");
-				oldTextAreaCodigo = textAreaCodigo.getText();
-			}else{
-				lblStatus.setText("Não modificado");
-			}
-		}else{
-			lblStatus.setText(pTipo);
+
+	private void btnEquipeEvt() {
+		textAreaMensagens.setText("André Vinícius Bampi \n"
+				+ "Maicon Machado Gerardi da Silva \n"
+				+ "Reinoldo Krause Junior");
+	}
+
+	private void btnCopiarEvt() {
+		if (textAreaCodigo.getSelectedText() != null) {
+			StringSelection selection = new StringSelection(textAreaCodigo
+					.getSelectedText().toString());
+			Clipboard clipboard = Toolkit.getDefaultToolkit()
+					.getSystemClipboard();
+			clipboard.setContents(selection, selection);
 		}
 	}
-	
-	
-	public Principal() {
 
-		panelPrincipal = new JPanel();
+	private void btnColarEvt() {
+		String str = getClipboardContents();
+		textAreaCodigo.setText(textAreaCodigo.getText().toString() + "" + str);
+	}
+
+	private void btnRecortarEvt() {
+		btnCopiarEvt();
+		textAreaCodigo.replaceSelection("");
+	}
+
+	private void btnSalvarEvt() {
+		if (pathFile != null) {
+			try {
+				gravarNoArquivo();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			lblStatus.setText("Não modificado");
+		} else {
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setCurrentDirectory(new File(System
+					.getProperty("user.home")));
+			int result = fileChooser.showOpenDialog(this);
+
+			if (result == JFileChooser.APPROVE_OPTION) {
+				File selectedFile = fileChooser.getSelectedFile();
+				setTitle("Selected file: " + selectedFile.getAbsolutePath());
+				lblStatus.setText("Selected file: "
+						+ selectedFile.getAbsolutePath());
+				pathFile = selectedFile.getAbsolutePath();
+
+				try {
+					gravarNoArquivo();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private void gravarNoArquivo() throws IOException {
+		FileWriter fw = new FileWriter(pathFile);
+		BufferedWriter bw = new BufferedWriter(fw);
+		bw.write(textAreaCodigo.getText().toString());
+		bw.close();
+		fw.close();
+		lblStatus.setText("Não modificado");
+	}
+
+	public String getClipboardContents() {
+		String result = "";
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		Transferable contents = clipboard.getContents(null);
+		boolean hasTransferableText = (contents != null)
+				&& contents.isDataFlavorSupported(DataFlavor.stringFlavor);
+		if (hasTransferableText) {
+			try {
+				result = (String) contents
+						.getTransferData(DataFlavor.stringFlavor);
+			} catch (Exception ex) {
+				System.out.println(ex);
+				ex.printStackTrace();
+			}
+		}
+		return result;
+	}
+
+	public Principal() {
+		@SuppressWarnings("unused")
+		JPanel panelPrincipal = new JPanel();
 		panelStatus = new JPanel();
-		lblStatus = new JLabel("New label");
-		
+		lblStatus = new JLabel("Não Modificado");
+
 		panelStatus.add(lblStatus);
 		setSize(800, 600);
 		setLocationRelativeTo(null);
@@ -129,7 +217,7 @@ public class Principal extends JFrame {
 		gbc_panel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panel.gridx = 0;
 		gbc_panel.gridy = 0;
-		
+
 		getContentPane().add(panel, gbc_panel);
 
 		String valorPadraoTexto = "<html><div style=\"text-align:center\"><br /><img src="
@@ -201,7 +289,6 @@ public class Principal extends JFrame {
 		panel.add(btnGerarCodigo);
 		panel.add(btnEquipe);
 
-		
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setAlignmentY(Component.CENTER_ALIGNMENT);
 		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -212,16 +299,37 @@ public class Principal extends JFrame {
 		getContentPane().add(splitPane, gbc_splitPane);
 
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane
+				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		splitPane.setLeftComponent(scrollPane);
 
 		textAreaCodigo = new JTextArea();
+		textAreaCodigo.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				setStatusBar();
+			}
+		});
 		textAreaCodigo.setText("");
 
 		final JTextArea lines = new JTextArea("01");
-				
+
 		lines.setBackground(Color.LIGHT_GRAY);
 		lines.setEditable(false);
-//TODO
+		// TODO
 		textAreaCodigo.addKeyListener(new KeyListener() {
 
 			@Override
@@ -232,8 +340,8 @@ public class Principal extends JFrame {
 			public void keyReleased(KeyEvent event) {
 				if (event.isControlDown()) {
 					// CTRL + n
-					if (event.getKeyCode() == KeyEvent.VK_N) {	
-						btnNovoEvt();						
+					if (event.getKeyCode() == KeyEvent.VK_N) {
+						btnNovoEvt();
 					}
 					// CTRL + A
 					if (event.getKeyCode() == KeyEvent.VK_A) {
@@ -241,54 +349,43 @@ public class Principal extends JFrame {
 					}
 					// CTRL + S
 					if (event.getKeyCode() == KeyEvent.VK_S) {
-
-						System.out.println("salvar");
+						btnSalvarEvt();
 					}
 					// CTRL + C
 					if (event.getKeyCode() == KeyEvent.VK_C) {
-
-						System.out.println("copiar");
+						btnCopiarEvt();
 					}
 					// CTRL + V
 					if (event.getKeyCode() == KeyEvent.VK_V) {
-
-						System.out.println("colar");
+						btnColarEvt();
 					}
 					// CTRL + R
 					if (event.getKeyCode() == KeyEvent.VK_R) {
-
-						System.out.println("recortar");
+						btnRecortarEvt();
 					}
 
 				}
 				// F8
-				//if (event.getKeyCode() == KeyEvent.VK_F8) {
-				//	System.out.println("compilar1");
-				//} Não funciona se usar aqui
-				
+//				if (event.getKeyCode() == KeyEvent.VK_F8) {
+//					System.out.println("compilar1");
+//				}
+
 				// F9
 				if (event.getKeyCode() == KeyEvent.VK_F9) {
 					btnGerarCodigoEvt();
 				}
 				// F1
-				if (event.getKeyCode() == KeyEvent.VK_F1) {					
+				if (event.getKeyCode() == KeyEvent.VK_F1) {
 					btnEquipeEvt();
 				}
-				
-				setStatusBar("");			
-				
-				
 			}
 
 			@Override
 			public void keyPressed(KeyEvent evt) {
 				if (evt.getKeyCode() == KeyEvent.VK_F8) {
 					btnCompilarEvt();
-				}							
-				
-			}		
-			
-			
+				}
+			}
 		});
 
 		textAreaCodigo.getDocument().addDocumentListener(
@@ -297,6 +394,10 @@ public class Principal extends JFrame {
 		scrollPane.setViewportView(textAreaCodigo);
 		scrollPane.setRowHeaderView(lines);
 		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1
+				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane_1
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		splitPane.setRightComponent(scrollPane_1);
 
 		splitPane.setDividerLocation(370);
@@ -305,29 +406,29 @@ public class Principal extends JFrame {
 		textAreaMensagens.setMinimumSize(new Dimension(4, 5));
 		textAreaMensagens.setEditable(false);
 		scrollPane_1.setViewportView(textAreaMensagens);
-		
+
 		GridBagConstraints gbc_panelStatus = new GridBagConstraints();
 		gbc_panelStatus.anchor = GridBagConstraints.SOUTHWEST;
 		gbc_panelStatus.gridx = 0;
 		gbc_panelStatus.gridy = 2;
 		getContentPane().add(panelStatus, gbc_panelStatus);
-		panelStatus.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 2));		
+		panelStatus.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 2));
 
 		setVisible(true);
 
-		// Ação do botão Novo		
+		// Ação do botão Novo
 		btnNovo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnNovoEvt();
 			}
 		});
-		
+
 		btnAbrir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnAbrirEvt();
 			}
 		});
-		
+
 		btnCompilar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnCompilarEvt();
@@ -339,19 +440,38 @@ public class Principal extends JFrame {
 				btnGerarCodigoEvt();
 			}
 		});
-		
+
 		btnEquipe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnEquipeEvt();
 			}
 		});
 
-		
+		btnCopiar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnCopiarEvt();
+			}
+		});
 
-		
+		btnColar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnColarEvt();
+			}
+		});
+
+		btnRecortar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnRecortarEvt();
+			}
+		});
+
+		btnSalvar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnSalvarEvt();
+			}
+		});
 	}
 
-	
 	/**
 	 * @author Maiconzera
 	 * @param jta
@@ -397,5 +517,4 @@ public class Principal extends JFrame {
 
 	}
 
-		
 }
