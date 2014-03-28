@@ -12,8 +12,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -27,11 +33,85 @@ import javax.swing.text.Element;
 
 public class Principal extends JFrame {
 
+	// decvar	
 	private static final long serialVersionUID = -2529644283675445941L;
-
+	private String oldTextAreaCodigo = "";	
+	private JPanel panelPrincipal, panelStatus;
+	private JLabel lblStatus;
+	private JTextArea textAreaCodigo, textAreaMensagens; 
+	private JButton btnNovo, btnAbrir, btnSalvar, btnCopiar, btnColar, btnRecortar, btnCompilar, btnGerarCodigo, btnEquipe; 
+	
+	private void btnNovoEvt(){
+		oldTextAreaCodigo = "";
+		textAreaMensagens.setText("");
+        textAreaCodigo.setText("");
+        setStatusBar("Não modificado");        
+	}
+	
+	private void btnAbrirEvt(){
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+		int result = fileChooser.showOpenDialog(this);
+		
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = fileChooser.getSelectedFile();
+		    panelPrincipal.setBorder(javax.swing.BorderFactory.createTitledBorder("Selected file: " + selectedFile.getAbsolutePath()));
+		    
+		    BufferedReader reader;
+			try {
+				reader = new BufferedReader(new FileReader(selectedFile.toString()));
+				String line = null;
+			    while ((line = reader.readLine()) != null) {
+			        textAreaCodigo.setText(textAreaCodigo.getText() + line + "\n");
+			    }
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    
+		    
+		}		
+		setStatusBar("Não modificado");
+	}
+	
+	private void btnCompilarEvt(){
+		textAreaMensagens.setText("Compilação de programas ainda não foi implementada");            
+	}
+	
+	private void btnGerarCodigoEvt(){
+		textAreaMensagens.setText("Geração de código ainda não foi implementada");            
+	}
+	
+	private void btnEquipeEvt(){
+		JOptionPane.showMessageDialog(null, "André Vinícius Bampi \n"
+											+ "Maicon Machado Gerardi da Silva \n"
+											+ "Reinoldo Krause Junior", "Equipe",1);
+	}
+	
+	private void setStatusBar(String pTipo){
+		if (pTipo == ""){
+			if (textAreaCodigo.getText() != oldTextAreaCodigo){
+				lblStatus.setText("Modificado");
+				oldTextAreaCodigo = textAreaCodigo.getText();
+			}else{
+				lblStatus.setText("Não modificado");
+			}
+		}else{
+			lblStatus.setText(pTipo);
+		}
+	}
+	
+	
 	public Principal() {
 
-		JPanel panelPrincipal = new JPanel();
+		panelPrincipal = new JPanel();
+		panelStatus = new JPanel();
+		lblStatus = new JLabel("New label");
+		
+		panelStatus.add(lblStatus);
 		setSize(800, 600);
 		setLocationRelativeTo(null);
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -57,56 +137,55 @@ public class Principal extends JFrame {
 
 		Font fontButtonsHeader = new Font("Arial", 1, 10);
 
-		JButton btnNovo = new JButton();
-
+		btnNovo = new JButton();
 		btnNovo.setFont(fontButtonsHeader);
 		btnNovo.setText(String.format(valorPadraoTexto, "novo.png",
 				"novo [ctrl-n]"));
 		btnNovo.setPreferredSize(new Dimension(80, 75));
 
-		JButton btnAbrir = new JButton();
+		btnAbrir = new JButton();
 		btnAbrir.setFont(fontButtonsHeader);
 		btnAbrir.setText(String.format(valorPadraoTexto, "open.png",
 				"abrir [ctrl-a]"));
 		btnAbrir.setPreferredSize(new Dimension(80, 75));
 
-		JButton btnSalvar = new JButton();
+		btnSalvar = new JButton();
 		btnSalvar.setFont(fontButtonsHeader);
 		btnSalvar.setText(String.format(valorPadraoTexto, "save.png",
 				"salvar [ctrl-s]"));
 		btnSalvar.setPreferredSize(new Dimension(80, 75));
 
-		JButton btnCopiar = new JButton();
+		btnCopiar = new JButton();
 		btnCopiar.setFont(fontButtonsHeader);
 		btnCopiar.setText(String.format(valorPadraoTexto, "copy.png",
 				"copiar [ctrl-c]"));
 		btnCopiar.setPreferredSize(new Dimension(80, 75));
 
-		JButton btnColar = new JButton();
+		btnColar = new JButton();
 		btnColar.setFont(fontButtonsHeader);
 		btnColar.setText(String.format(valorPadraoTexto, "paste.png",
 				"colar [ctrl-v]"));
 		btnColar.setPreferredSize(new Dimension(80, 75));
 
-		JButton btnRecortar = new JButton();
+		btnRecortar = new JButton();
 		btnRecortar.setFont(fontButtonsHeader);
 		btnRecortar.setText(String.format(valorPadraoTexto, "cut.png",
 				"recortar [ctrl-r]"));
 		btnRecortar.setPreferredSize(new Dimension(80, 75));
 
-		JButton btnCompilar = new JButton();
+		btnCompilar = new JButton();
 		btnCompilar.setFont(fontButtonsHeader);
 		btnCompilar.setText(String.format(valorPadraoTexto, "play.png",
 				"compilar [F8]"));
 		btnCompilar.setPreferredSize(new Dimension(80, 75));
 
-		JButton btnGerarCodigo = new JButton();
+		btnGerarCodigo = new JButton();
 		btnGerarCodigo.setFont(fontButtonsHeader);
 		btnGerarCodigo.setText(String.format(valorPadraoTexto, "make.png",
 				"gerar código [F9]"));
 		btnGerarCodigo.setPreferredSize(new Dimension(80, 75));
 
-		JButton btnEquipe = new JButton();
+		btnEquipe = new JButton();
 		btnEquipe.setFont(fontButtonsHeader);
 		btnEquipe.setText(String.format(valorPadraoTexto, "people.png",
 				"equipe [F1]"));
@@ -135,10 +214,11 @@ public class Principal extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		splitPane.setLeftComponent(scrollPane);
 
-		final JTextArea textAreaCodigo = new JTextArea();
+		textAreaCodigo = new JTextArea();
+		textAreaCodigo.setText("");
 
 		final JTextArea lines = new JTextArea("01");
-
+				
 		lines.setBackground(Color.LIGHT_GRAY);
 		lines.setEditable(false);
 //TODO
@@ -152,14 +232,12 @@ public class Principal extends JFrame {
 			public void keyReleased(KeyEvent event) {
 				if (event.isControlDown()) {
 					// CTRL + n
-					if (event.getKeyCode() == KeyEvent.VK_N) {
-
-						System.out.println("novo");
+					if (event.getKeyCode() == KeyEvent.VK_N) {	
+						btnNovoEvt();						
 					}
 					// CTRL + A
 					if (event.getKeyCode() == KeyEvent.VK_A) {
-
-						JOptionPane.showMessageDialog(null,"a");
+						btnAbrirEvt();
 					}
 					// CTRL + S
 					if (event.getKeyCode() == KeyEvent.VK_S) {
@@ -184,26 +262,33 @@ public class Principal extends JFrame {
 
 				}
 				// F8
-				if (event.getKeyCode() == KeyEvent.VK_F8) {
-
-					System.out.println("compilar");
-				}
+				//if (event.getKeyCode() == KeyEvent.VK_F8) {
+				//	System.out.println("compilar1");
+				//} Não funciona se usar aqui
+				
 				// F9
 				if (event.getKeyCode() == KeyEvent.VK_F9) {
-
-					System.out.println("gerar codigo");
+					btnGerarCodigoEvt();
 				}
 				// F1
-				if (event.getKeyCode() == KeyEvent.VK_F1) {
-
-					System.out.println("equipe");
+				if (event.getKeyCode() == KeyEvent.VK_F1) {					
+					btnEquipeEvt();
 				}
+				
+				setStatusBar("");			
+				
+				
 			}
 
 			@Override
 			public void keyPressed(KeyEvent evt) {
-
-			}
+				if (evt.getKeyCode() == KeyEvent.VK_F8) {
+					btnCompilarEvt();
+				}							
+				
+			}		
+			
+			
 		});
 
 		textAreaCodigo.getDocument().addDocumentListener(
@@ -216,34 +301,57 @@ public class Principal extends JFrame {
 
 		splitPane.setDividerLocation(370);
 		splitPane.setResizeWeight(1);
-		final JTextArea textAreaMensagens = new JTextArea();
+		textAreaMensagens = new JTextArea();
 		textAreaMensagens.setMinimumSize(new Dimension(4, 5));
 		textAreaMensagens.setEditable(false);
 		scrollPane_1.setViewportView(textAreaMensagens);
-
-		JPanel panelStatus = new JPanel();
+		
 		GridBagConstraints gbc_panelStatus = new GridBagConstraints();
 		gbc_panelStatus.anchor = GridBagConstraints.SOUTHWEST;
 		gbc_panelStatus.gridx = 0;
 		gbc_panelStatus.gridy = 2;
 		getContentPane().add(panelStatus, gbc_panelStatus);
-		panelStatus.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 2));
-
-		final JLabel lblStatus = new JLabel("New label");
-		panelStatus.add(lblStatus);
+		panelStatus.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 2));		
 
 		setVisible(true);
 
-		// Ação do botão Novo
+		// Ação do botão Novo		
 		btnNovo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textAreaMensagens.setText("");
-				textAreaCodigo.setText("");
-				lblStatus.setText(" ");
+				btnNovoEvt();
 			}
 		});
+		
+		btnAbrir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnAbrirEvt();
+			}
+		});
+		
+		btnCompilar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnCompilarEvt();
+			}
+		});
+
+		btnGerarCodigo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnGerarCodigoEvt();
+			}
+		});
+		
+		btnEquipe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnEquipeEvt();
+			}
+		});
+
+		
+
+		
 	}
 
+	
 	/**
 	 * @author Maiconzera
 	 * @param jta
@@ -289,4 +397,5 @@ public class Principal extends JFrame {
 
 	}
 
+		
 }
