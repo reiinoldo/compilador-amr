@@ -43,6 +43,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Element;
 
+import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
+
 public class Principal extends JFrame {
 
 	// decvar
@@ -59,6 +61,7 @@ public class Principal extends JFrame {
 		textAreaMensagens.setText("");
 		textAreaCodigo.setText("");
 		lblStatus.setText("Não modificado");
+		setTitle("Compilador");
 	}
 
 	private void btnAbrirEvt() {
@@ -69,9 +72,8 @@ public class Principal extends JFrame {
 
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = fileChooser.getSelectedFile();
-			setTitle("Selected file: " + selectedFile.getAbsolutePath());
-			lblStatus.setText("Selected file: "
-					+ selectedFile.getAbsolutePath());
+			setTitle("Compilador | Arquivo: " + selectedFile.getAbsolutePath());
+			lblStatus.setText(selectedFile.getAbsolutePath() + " | Não modificado");
 			pathFile = selectedFile.getAbsolutePath();
 
 			BufferedReader reader;
@@ -93,7 +95,6 @@ public class Principal extends JFrame {
 			}
 
 		}
-		lblStatus.setText("Não modificado");
 	}
 
 	private void btnCompilarEvt() {
@@ -123,8 +124,10 @@ public class Principal extends JFrame {
 	}
 
 	private void btnColarEvt() {
-		String str = getClipboardContents();
-		textAreaCodigo.setText(textAreaCodigo.getText().toString() + "" + str);
+		String str = getClipboardContents();		
+		textAreaCodigo.setText(textAreaCodigo.getText().toString().substring(0, textAreaCodigo.getCaretPosition())
+							   + "" + str 
+							   + textAreaCodigo.getText().toString().substring(textAreaCodigo.getCaretPosition()));
 	}
 
 	private void btnRecortarEvt() {
@@ -139,7 +142,7 @@ public class Principal extends JFrame {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			lblStatus.setText("Não modificado");
+			lblStatus.setText(pathFile + " | Não modificado");
 		} else {
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setCurrentDirectory(new File(System
@@ -148,9 +151,8 @@ public class Principal extends JFrame {
 
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = fileChooser.getSelectedFile();
-				setTitle("Selected file: " + selectedFile.getAbsolutePath());
-				lblStatus.setText("Selected file: "
-						+ selectedFile.getAbsolutePath());
+				setTitle("Compilador | Arquivo: " + selectedFile.getAbsolutePath());
+				lblStatus.setText(selectedFile.getAbsolutePath() + " | Não modificado");
 				pathFile = selectedFile.getAbsolutePath();
 
 				try {
@@ -168,7 +170,7 @@ public class Principal extends JFrame {
 		bw.write(textAreaCodigo.getText().toString());
 		bw.close();
 		fw.close();
-		lblStatus.setText("Não modificado");
+		lblStatus.setText(pathFile + " | Não modificado");
 	}
 
 	public String getClipboardContents() {
@@ -218,9 +220,9 @@ public class Principal extends JFrame {
 
 	public Principal() {
 		@SuppressWarnings("unused")
-		JPanel panelPrincipal = new JPanel();
-		panelStatus = new JPanel();
-		lblStatus = new JLabel("Não Modificado");
+		JPanel panelPrincipal = new JPanel();		
+		panelStatus = new JPanel();		
+		lblStatus = new JLabel("Não Modificado");	
 
 		panelStatus.add(lblStatus);
 		setSize(800, 600);
@@ -313,6 +315,7 @@ public class Principal extends JFrame {
 		panel.add(btnEquipe);
 
 		JSplitPane splitPane = new JSplitPane();
+		splitPane.setFocusable(false);
 		splitPane.setAlignmentY(Component.CENTER_ALIGNMENT);
 		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		GridBagConstraints gbc_splitPane = new GridBagConstraints();
@@ -332,12 +335,18 @@ public class Principal extends JFrame {
 		textAreaCodigo.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void removeUpdate(DocumentEvent e) {
-                lblStatus.setText("Modificado");
+            	if (pathFile != null)
+            		lblStatus.setText(pathFile + " | Modificado");
+            	else
+            		lblStatus.setText("Modificado");
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-            	lblStatus.setText("Modificado");
+            	if (pathFile != null)
+            		lblStatus.setText(pathFile + " | Modificado");
+            	else
+            		lblStatus.setText("Modificado");
             }
 
             @Override
@@ -397,7 +406,7 @@ public class Principal extends JFrame {
 				btnCompilarEvt();
 			}
 		});
-		addAtalho(btnCompilar, KeyStroke.getKeyStroke("F8"));
+		addAtalho(btnCompilar, KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0, true));
 
 		btnGerarCodigo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
