@@ -8,7 +8,7 @@ public class AnalysisError extends Exception
     {
         super(msg);
         this.position = position;
-    }
+    } //sangeu nos zoio
 
     public AnalysisError(String msg)
     {
