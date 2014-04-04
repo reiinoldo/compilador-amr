@@ -1,3 +1,5 @@
+package br.org.furb.compilador.model.lexico;
+
 public class AnalysisError extends Exception
 {
     private int position;

@@ -1,3 +1,5 @@
+package br.org.furb.compilador.model.lexico;
+
 public class Token
 {
     private int id;

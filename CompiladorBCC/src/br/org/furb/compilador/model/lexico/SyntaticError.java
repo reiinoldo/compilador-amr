@@ -1,3 +1,5 @@
+package br.org.furb.compilador.model.lexico;
+
 public class SyntaticError extends AnalysisError
 {
     public SyntaticError(String msg, int position)
