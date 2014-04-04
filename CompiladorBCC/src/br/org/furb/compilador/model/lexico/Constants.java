@@ -1,3 +1,5 @@
+package br.org.furb.compilador.model.lexico;
+
 public interface Constants extends ScannerConstants
 {
     int EPSILON  = 0;
