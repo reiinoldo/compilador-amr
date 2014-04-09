@@ -42,6 +42,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Element;
 
+import br.org.furb.compilador.controller.Compilador;
+
 public class Principal extends JFrame {
 
 	// decvar
@@ -95,8 +97,9 @@ public class Principal extends JFrame {
 	}
 
 	private void btnCompilarEvt() {
-		textAreaMensagens
-				.setText("Compilação de programas ainda não foi implementada");
+		//textAreaMensagens.setText("Compilação de programas ainda não foi implementada");
+		Compilador compilador = new Compilador();
+		textAreaMensagens.setText(compilador.Compilar(textAreaCodigo.getText().toString()));
 	}
 
 	private void btnGerarCodigoEvt() {
