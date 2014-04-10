@@ -1,11 +1,11 @@
 package br.org.furb.compilador.controller;
 
-public class Compilador {
+public class CompiladorController {
 	
 	
 	// Singleton
 	
-	public String Compilar(String texto){
+	public String compilar(String texto){
 		if (texto.isEmpty() || texto.trim().equals("")){
 			return "Nenhum programa para compilar!";
 		}

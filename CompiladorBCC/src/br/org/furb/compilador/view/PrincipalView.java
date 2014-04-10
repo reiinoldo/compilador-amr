@@ -42,9 +42,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Element;
 
-import br.org.furb.compilador.controller.Compilador;
+import br.org.furb.compilador.controller.CompiladorController;
 
-public class Principal extends JFrame {
+public class PrincipalView extends JFrame {
 
 	// decvar
 	private static final long serialVersionUID = -2529644283675445941L;
@@ -54,6 +54,7 @@ public class Principal extends JFrame {
 	private JButton btnNovo, btnAbrir, btnSalvar, btnCopiar, btnColar,
 			btnRecortar, btnCompilar, btnGerarCodigo, btnEquipe;
 	private String pathFile;
+	private CompiladorController compilador = new CompiladorController();
 
 	private void btnNovoEvt() {
 		pathFile = null;
@@ -98,8 +99,7 @@ public class Principal extends JFrame {
 
 	private void btnCompilarEvt() {
 		//textAreaMensagens.setText("Compilação de programas ainda não foi implementada");
-		Compilador compilador = new Compilador();
-		textAreaMensagens.setText(compilador.Compilar(textAreaCodigo.getText().toString()));
+		textAreaMensagens.setText(compilador.compilar(textAreaCodigo.getText().toString()));
 	}
 
 	private void btnGerarCodigoEvt() {
@@ -218,7 +218,7 @@ public class Principal extends JFrame {
 		}
 	}
 
-	public Principal() {
+	public PrincipalView() {
 		@SuppressWarnings("unused")
 		JPanel panelPrincipal = new JPanel();		
 		panelStatus = new JPanel();		
