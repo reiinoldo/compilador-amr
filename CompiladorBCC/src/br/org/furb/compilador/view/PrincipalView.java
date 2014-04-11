@@ -60,7 +60,7 @@ public class PrincipalView extends JFrame {
 		pathFile = null;
 		textAreaMensagens.setText("");
 		textAreaCodigo.setText("");
-		lblStatus.setText("N�o modificado");
+		lblStatus.setText("Não modificado");
 		setTitle("Compilador");
 	}
 
@@ -73,7 +73,7 @@ public class PrincipalView extends JFrame {
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = fileChooser.getSelectedFile();
 			setTitle("Compilador | Arquivo: " + selectedFile.getAbsolutePath());
-			lblStatus.setText(selectedFile.getAbsolutePath() + " | N�o modificado");
+			lblStatus.setText(selectedFile.getAbsolutePath() + " | Não modificado");
 			pathFile = selectedFile.getAbsolutePath();
 
 			BufferedReader reader;
@@ -104,11 +104,11 @@ public class PrincipalView extends JFrame {
 
 	private void btnGerarCodigoEvt() {
 		textAreaMensagens
-				.setText("Gera��o de c�digo ainda n�o foi implementada");
+				.setText("Geração de código ainda não foi implementada");
 	}
 
 	private void btnEquipeEvt() {
-		textAreaMensagens.setText("Andr� Vin�cius Bampi \n"
+		textAreaMensagens.setText("André Vinícius Bampi \n"
 				+ "Maicon Machado Gerardi da Silva \n"
 				+ "Reinoldo Krause Junior");
 	}
@@ -142,7 +142,7 @@ public class PrincipalView extends JFrame {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			lblStatus.setText(pathFile + " | N�o modificado");
+			lblStatus.setText(pathFile + " | Não modificado");
 		} else {
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setCurrentDirectory(new File(System
@@ -152,7 +152,7 @@ public class PrincipalView extends JFrame {
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = fileChooser.getSelectedFile();
 				setTitle("Compilador | Arquivo: " + selectedFile.getAbsolutePath());
-				lblStatus.setText(selectedFile.getAbsolutePath() + " | N�o modificado");
+				lblStatus.setText(selectedFile.getAbsolutePath() + " | Não modificado");
 				pathFile = selectedFile.getAbsolutePath();
 
 				try {
@@ -170,7 +170,7 @@ public class PrincipalView extends JFrame {
 		bw.write(textAreaCodigo.getText().toString());
 		bw.close();
 		fw.close();
-		lblStatus.setText(pathFile + " | N�o modificado");
+		lblStatus.setText(pathFile + " | Não modificado");
 	}
 
 	public String getClipboardContents() {
@@ -222,7 +222,7 @@ public class PrincipalView extends JFrame {
 		@SuppressWarnings("unused")
 		JPanel panelPrincipal = new JPanel();		
 		panelStatus = new JPanel();		
-		lblStatus = new JLabel("N�o Modificado");	
+		lblStatus = new JLabel("Não Modificado");	
 
 		panelStatus.add(lblStatus);
 		setSize(800, 600);
@@ -295,7 +295,7 @@ public class PrincipalView extends JFrame {
 		btnGerarCodigo = new JButton();
 		btnGerarCodigo.setFont(fontButtonsHeader);
 		btnGerarCodigo.setText(String.format(valorPadraoTexto, "make.png",
-				"gerar c�digo [F9]"));
+				"gerar código [F9]"));
 		btnGerarCodigo.setPreferredSize(new Dimension(80, 75));
 
 		btnEquipe = new JButton();
