@@ -1,0 +1,1 @@
+Compilador.jar -> Executavél principal
