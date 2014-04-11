@@ -4,7 +4,8 @@ public class Lexico implements Constants
 {
     private int position;
     private String input;
-
+    private int line = 1;
+    
     public Lexico()
     {
         this("");
@@ -37,11 +38,13 @@ public class Lexico implements Constants
         int lastState = 0;
         int endState = -1;
         int end = -1;
+        char carac = '|';
 
         while (hasInput())
         {
             lastState = state;
-            state = nextState(nextChar(), state);
+            carac = nextChar();
+            state = nextState(carac, state);
 
             if (state < 0)
                 break;
@@ -50,13 +53,17 @@ public class Lexico implements Constants
             {
                 if (tokenForState(state) >= 0)
                 {
+                	if (carac == '\n')
+                    	line++;
                     endState = state;
                     end = position;
                 }
             }
         }
-        if (endState < 0 || (endState != state && tokenForState(lastState) == -2))
-            throw new LexicalError(SCANNER_ERROR[lastState], start);
+        if (endState < 0 || (endState != state && tokenForState(lastState) == -2)){        	
+            //throw new LexicalError(SCANNER_ERROR[lastState], line);
+        	throw new LexicalError(getError(lastState, carac, line), start);
+        }    
 
         position = end;
 
@@ -68,7 +75,7 @@ public class Lexico implements Constants
         {
             String lexeme = input.substring(start, end);
             token = lookupToken(token, lexeme);
-            return new Token(token, lexeme, start);
+            return new Token(token, lexeme, start, line);
         }
     }
 
@@ -127,10 +134,18 @@ public class Lexico implements Constants
     }
 
     private char nextChar()
-    {
-        if (hasInput())
+    {    	     	
+        if (hasInput()){        	
             return input.charAt(position++);
-        else
+        }else
             return (char) -1;
     }
+
+    private String getError(int index, char caracter, int line) {
+    	String msg = "Erro na linha " + Integer.toString(line) + " - ";
+    	if (index == 0)
+    		return msg + caracter +  " " + SCANNER_ERROR[index];
+    	else			
+    		return msg + SCANNER_ERROR[index];
+	}
 }

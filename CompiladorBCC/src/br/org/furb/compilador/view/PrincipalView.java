@@ -60,7 +60,7 @@ public class PrincipalView extends JFrame {
 		pathFile = null;
 		textAreaMensagens.setText("");
 		textAreaCodigo.setText("");
-		lblStatus.setText("Não modificado");
+		lblStatus.setText("Nï¿½o modificado");
 		setTitle("Compilador");
 	}
 
@@ -73,7 +73,7 @@ public class PrincipalView extends JFrame {
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = fileChooser.getSelectedFile();
 			setTitle("Compilador | Arquivo: " + selectedFile.getAbsolutePath());
-			lblStatus.setText(selectedFile.getAbsolutePath() + " | Não modificado");
+			lblStatus.setText(selectedFile.getAbsolutePath() + " | Nï¿½o modificado");
 			pathFile = selectedFile.getAbsolutePath();
 
 			BufferedReader reader;
@@ -98,17 +98,17 @@ public class PrincipalView extends JFrame {
 	}
 
 	private void btnCompilarEvt() {
-		//textAreaMensagens.setText("Compilação de programas ainda não foi implementada");
+		//textAreaMensagens.setText("Compilaï¿½ï¿½o de programas ainda nï¿½o foi implementada");
 		textAreaMensagens.setText(compilador.compilar(textAreaCodigo.getText().toString()));
 	}
 
 	private void btnGerarCodigoEvt() {
 		textAreaMensagens
-				.setText("Geração de código ainda não foi implementada");
+				.setText("Geraï¿½ï¿½o de cï¿½digo ainda nï¿½o foi implementada");
 	}
 
 	private void btnEquipeEvt() {
-		textAreaMensagens.setText("André Vinícius Bampi \n"
+		textAreaMensagens.setText("Andrï¿½ Vinï¿½cius Bampi \n"
 				+ "Maicon Machado Gerardi da Silva \n"
 				+ "Reinoldo Krause Junior");
 	}
@@ -142,7 +142,7 @@ public class PrincipalView extends JFrame {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			lblStatus.setText(pathFile + " | Não modificado");
+			lblStatus.setText(pathFile + " | Nï¿½o modificado");
 		} else {
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setCurrentDirectory(new File(System
@@ -152,7 +152,7 @@ public class PrincipalView extends JFrame {
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = fileChooser.getSelectedFile();
 				setTitle("Compilador | Arquivo: " + selectedFile.getAbsolutePath());
-				lblStatus.setText(selectedFile.getAbsolutePath() + " | Não modificado");
+				lblStatus.setText(selectedFile.getAbsolutePath() + " | Nï¿½o modificado");
 				pathFile = selectedFile.getAbsolutePath();
 
 				try {
@@ -170,7 +170,7 @@ public class PrincipalView extends JFrame {
 		bw.write(textAreaCodigo.getText().toString());
 		bw.close();
 		fw.close();
-		lblStatus.setText(pathFile + " | Não modificado");
+		lblStatus.setText(pathFile + " | Nï¿½o modificado");
 	}
 
 	public String getClipboardContents() {
@@ -222,7 +222,7 @@ public class PrincipalView extends JFrame {
 		@SuppressWarnings("unused")
 		JPanel panelPrincipal = new JPanel();		
 		panelStatus = new JPanel();		
-		lblStatus = new JLabel("Não Modificado");	
+		lblStatus = new JLabel("Nï¿½o Modificado");	
 
 		panelStatus.add(lblStatus);
 		setSize(800, 600);
@@ -295,7 +295,7 @@ public class PrincipalView extends JFrame {
 		btnGerarCodigo = new JButton();
 		btnGerarCodigo.setFont(fontButtonsHeader);
 		btnGerarCodigo.setText(String.format(valorPadraoTexto, "make.png",
-				"gerar código [F9]"));
+				"gerar cï¿½digo [F9]"));
 		btnGerarCodigo.setPreferredSize(new Dimension(80, 75));
 
 		btnEquipe = new JButton();
@@ -332,6 +332,7 @@ public class PrincipalView extends JFrame {
 		splitPane.setLeftComponent(scrollPane);
 
 		textAreaCodigo = new JTextArea();
+		textAreaCodigo.setFont(new Font("Courier New", Font.PLAIN, 12));
 		textAreaCodigo.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void removeUpdate(DocumentEvent e) {
@@ -358,7 +359,8 @@ public class PrincipalView extends JFrame {
 		final JTextArea lines = new JTextArea("01");
 
 		lines.setBackground(Color.LIGHT_GRAY);
-		lines.setEditable(false);	
+		lines.setEditable(false);
+		lines.setFont(new Font("Courier New", Font.PLAIN, 12));
 
 		textAreaCodigo.getDocument().addDocumentListener(
 				listnerLineNumbers(textAreaCodigo, lines));
@@ -377,6 +379,7 @@ public class PrincipalView extends JFrame {
 		textAreaMensagens = new JTextArea();
 		textAreaMensagens.setMinimumSize(new Dimension(4, 5));
 		textAreaMensagens.setEditable(false);
+		textAreaMensagens.setFont(new Font("Courier New", Font.PLAIN, 12));
 		scrollPane_1.setViewportView(textAreaMensagens);
 
 		GridBagConstraints gbc_panelStatus = new GridBagConstraints();
@@ -386,7 +389,7 @@ public class PrincipalView extends JFrame {
 		getContentPane().add(panelStatus, gbc_panelStatus);
 		panelStatus.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 2));
 
-		// Ação do botão Novo
+		// Aï¿½ï¿½o do botï¿½o Novo
 		btnNovo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnNovoEvt();
