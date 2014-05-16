@@ -1,4 +1,4 @@
-package br.org.furb.compilador.model.lexico;
+package br.org.furb.compilador.model.analisador;
 
 public class SemanticError extends AnalysisError
 {

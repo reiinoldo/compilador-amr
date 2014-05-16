@@ -1,4 +1,4 @@
-package br.org.furb.compilador.model.lexico;
+package br.org.furb.compilador.model.analisador;
 
 public class AnalysisError extends Exception
 {
@@ -8,7 +8,7 @@ public class AnalysisError extends Exception
     {
         super(msg);
         this.position = position;
-    } 
+    }
 
     public AnalysisError(String msg)
     {

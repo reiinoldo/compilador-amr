@@ -1,4 +1,4 @@
-package br.org.furb.compilador.model.lexico;
+package br.org.furb.compilador.model.analisador;
 
 import br.org.furb.compilador.util.StringUtil;
 

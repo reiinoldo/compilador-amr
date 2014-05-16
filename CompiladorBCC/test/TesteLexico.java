@@ -1,6 +1,6 @@
-import br.org.furb.compilador.model.lexico.LexicalError;
-import br.org.furb.compilador.model.lexico.Lexico;
-import br.org.furb.compilador.model.lexico.Token;
+import br.org.furb.compilador.model.old.LexicalError;
+import br.org.furb.compilador.model.old.Lexico;
+import br.org.furb.compilador.model.old.Token;
 
 public class TesteLexico {
 	public static void main(String[] args) throws LexicalError {
