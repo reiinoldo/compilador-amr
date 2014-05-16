@@ -94,14 +94,12 @@ pr_return = identificador: "return"
 <retorno>
 <lista_cmd>
 <comando>
-<cmd_atribuicao>
 <cmd_entrada>
 <cmd_saida>
 <lista_expr>
 <cmd_selecao>
 <else>
 <cmd_repeticao>
-<cmd_modulo>
 <param_reais>
 //Criados nessa etapa
 <expressao>
@@ -111,12 +109,22 @@ pr_return = identificador: "return"
 <aritmetica>
 <termo>
 <fator>
+<lista_id1>
+<lista_param_aux1>
+<comando1>
+<lista_expr1>
+<expressao1>
+<relacional1>
+<aritmetica1>
+<termo1>
+<fator1>
 #Grammar
 <programa> ::= pr_main <var_glob> <lista_mod> <lista_cmd> pr_end ;
 <var_glob> ::= î | pr_global <variaveis> <var_glob> ;
 <variaveis>::= <tipo> <lista_id> <valor> ";" ;
 <tipo> ::= pr_boolean | pr_float | pr_integer | pr_string ;
-<lista_id> ::= identificador | identificador "," <lista_id> ;
+<lista_id> ::= identificador <lista_id1> ;
+<lista_id1> ::= î | "," <lista_id> ;
 <valor> ::= î | "=" <constante> ;
 <constante> ::= const_integer | const_float | const_string | <const_boolean> ;
 <const_boolean> ::= pr_true | pr_false ;
@@ -124,26 +132,31 @@ pr_return = identificador: "return"
 <modulo> ::= <tipo_mod> identificador "(" <lista_param> ")" <var_locais> <lista_cmd> <retorno> pr_end ;
 <tipo_mod> ::= <tipo> | pr_void ;
 <lista_param> ::= î | <lista_param_aux> ;
-<lista_param_aux> ::= <parametro> | <parametro> "," <lista_param_aux> ;
+<lista_param_aux> ::= <parametro> <lista_param_aux1> ;
+<lista_param_aux1> ::= î | "," <lista_param_aux> ;
 <parametro> ::= <tipo> identificador ;
 <var_locais> ::= î | pr_local <variaveis> <var_locais> ;
 <retorno> ::= î | pr_return <expressao> ";" ;
 <lista_cmd> ::= î | <comando> <lista_cmd> ;
-<comando> ::= <cmd_atribuicao> | <cmd_entrada> | <cmd_saida> | <cmd_selecao> | <cmd_repeticao> | <cmd_modulo> ;
-<cmd_atribuicao> ::= identificador "=" <expressao> ";" ;
+<comando> ::= identificador <comando1> | <cmd_entrada> | <cmd_saida> | <cmd_selecao> | <cmd_repeticao> ;
+<comando1> ::= "=" <expressao> ";" | "(" <param_reais> ")" ";" ;
 <cmd_entrada> ::= pr_scan "(" <lista_id> ")" ";" ;
 <cmd_saida> ::= pr_print "(" <lista_expr> ")" ";"| pr_println "(" <lista_expr> ")" ";" ;
-<lista_expr>::= <expressao> | <expressao> "," <lista_expr> ";" ;
+<lista_expr>::= <expressao> <lista_expr1> ;
+<lista_expr1> ::= î |  "," <lista_expr> ";" ;
 <cmd_selecao> ::= pr_if "(" <expressao> ")" <lista_cmd> <else> pr_end ";" ;
 <else> ::= î | pr_else <lista_cmd> ;
 <cmd_repeticao> ::= pr_do <lista_cmd> pr_while "(" <expressao> ")" ";" ;
-<cmd_modulo> ::= identificador "(" <param_reais> ")" ";" ;
 <param_reais> ::= î | <lista_expr> ;
-//Criados nessa etapa
-<expressao> ::= <expressao> "||"  <elemento> | <expressao> "&&" <elemento> | <elemento> ;
-<elemento> ::= <relacional> | pr_true | pr_false |  "!" <elemento> ; 
-<relacional> ::= <aritmetica> <operador_relacional> <aritmetica> | <aritmetica> ;
+<expressao> ::= <elemento> <expressao1> ;
+<expressao1> ::= î | "||"  <elemento> <expressao1> | "&&" <elemento> <expressao1> ;
+<elemento> ::= <relacional> | pr_true | pr_false |  "!" <elemento> ;
+<relacional> ::= <aritmetica> <relacional1> ;
+<relacional1> ::= <operador_relacional> <aritmetica> | î ;
 <operador_relacional> ::= "==" | "!=" | "<" | "<=" | ">" | ">=" ;
-<aritmetica> ::= <aritmetica> "+" <termo> | <aritmetica> "-" <termo> | <termo> ;
-<termo> ::= <termo> "*" <fator> | <termo> "/" <fator> | <fator> ;
-<fator> ::= identificador | identificador "(" <lista_expr> ")" | const_integer | const_float | const_string | "(" <expressao> ")" | "+" <fator> | "-" <fator> ;
+<aritmetica> ::= <termo> <aritmetica1>;
+<aritmetica1> ::= î | "+" <termo> <aritmetica1> | "-" <termo> <aritmetica1> ;
+<termo> ::= <fator> <termo1> ;
+<termo1> ::= î | "*" <fator> <termo1> | "/" <fator> <termo1> ;
+<fator> ::= identificador <fator1> | const_integer | const_float | const_string | "(" <expressao> ")" | "+" <fator> | "-" <fator> ;
+<fator1> ::= î | "(" <lista_expr> ")" ;

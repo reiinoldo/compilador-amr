@@ -1,6 +1,6 @@
-package br.org.furb.compilador.model.lexico;
+package br.org.furb.compilador.model.old;
 
-public interface ScannerConstants
+public interface old_ScannerConstants
 {
     int[] SCANNER_TABLE_INDEXES = 
     {

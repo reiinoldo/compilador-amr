@@ -1,8 +1,8 @@
 package br.org.furb.compilador.controller;
 
-import br.org.furb.compilador.model.lexico.LexicalError;
-import br.org.furb.compilador.model.lexico.Lexico;
-import br.org.furb.compilador.model.lexico.Token;
+import br.org.furb.compilador.model.old.LexicalError;
+import br.org.furb.compilador.model.old.Lexico;
+import br.org.furb.compilador.model.old.Token;
 import br.org.furb.compilador.util.StringUtil;
 
 public class CompiladorController {
