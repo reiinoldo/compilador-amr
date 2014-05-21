@@ -71,7 +71,7 @@ pr_local = identificador: "local"
 pr_return = identificador: "return"
 
 //Ignorados
-: {comentario_linha}
+:! {comentario_linha}
 :! {comentario_bloco}
 : [\s\t\n\r]*
 
