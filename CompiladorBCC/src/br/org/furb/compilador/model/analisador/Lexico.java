@@ -26,6 +26,11 @@ public class Lexico implements Constants
     {
         position = pos;
     }
+    
+    public int getLine()
+    {
+        return line;
+    }
 
     public Token nextToken() throws LexicalError
     {

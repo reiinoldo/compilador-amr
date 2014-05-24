@@ -2,6 +2,8 @@ package br.org.furb.compilador.model.analisador;
 
 import java.util.Stack;
 
+import br.org.furb.compilador.model.ErrorSintatico;
+
 public class Sintatico implements Constants
 {
     private Stack stack = new Stack();
@@ -29,11 +31,15 @@ public class Sintatico implements Constants
     {
         if (currentToken == null)
         {
+        	int line = 0;
             int pos = 0;
-            if (previousToken != null)
+            if (previousToken != null){
                 pos = previousToken.getPosition()+previousToken.getLexeme().length();
+                line = previousToken.getLine();
+            }    
+            
 
-            currentToken = new Token(DOLLAR, "$", pos, 0);
+            currentToken = new Token(DOLLAR, "$", pos, line);
         }
 
         int x = ((Integer)stack.pop()).intValue();
@@ -52,13 +58,14 @@ public class Sintatico implements Constants
                 else
                 {
                     previousToken = currentToken;
-                    currentToken = scanner.nextToken();
+                    currentToken = scanner.nextToken();                    
                     return false;
                 }
             }
             else
             {
-                throw new SyntaticError(PARSER_ERROR[x], currentToken.getPosition());
+                //throw new SyntaticError(PARSER_ERROR[x], currentToken.getPosition());
+            	throw new SyntaticError(getError(x, ErrorSintatico.ERROR_TERMINAL));
             }
         }
         else if (isNonTerminal(x))
@@ -66,7 +73,8 @@ public class Sintatico implements Constants
             if (pushProduction(x, a))
                 return false;
             else
-                throw new SyntaticError(PARSER_ERROR[x], currentToken.getPosition());
+                //throw new SyntaticError(PARSER_ERROR[x], currentToken.getPosition());
+            	throw new SyntaticError(getError(x, ErrorSintatico.ERROR_NON_TERMINAL));
         }
         else // isSemanticAction(x)
         {
@@ -106,4 +114,20 @@ public class Sintatico implements Constants
         while ( ! step() )
             ;
     }
+    
+    private String getError(int index, ErrorSintatico errorType) {
+    	String msg = "Erro na linha " + Integer.toString( currentToken.getLine()) + " - encontrado ";
+    	
+    	if (errorType == ErrorSintatico.ERROR_TERMINAL){
+    		msg = msg + currentToken.getClasse() + " (" + currentToken.getLexeme() + ") "; 
+    	}else{
+    		if (currentToken.getLexeme().equals("$"))
+    			msg = msg + "EOF ";
+    		else
+    			msg = msg + currentToken.getLexeme() + " ";
+    	}
+    	
+    	return msg + PARSER_ERROR[index];
+	}
+    
 }
