@@ -65,7 +65,7 @@ public class Sintatico implements Constants
             else
             {
                 //throw new SyntaticError(PARSER_ERROR[x], currentToken.getPosition());
-            	throw new SyntaticError(getError(x, ErrorSintatico.ERROR_TERMINAL));
+            	throw new SyntaticError(getError(x));
             }
         }
         else if (isNonTerminal(x))
@@ -74,7 +74,7 @@ public class Sintatico implements Constants
                 return false;
             else
                 //throw new SyntaticError(PARSER_ERROR[x], currentToken.getPosition());
-            	throw new SyntaticError(getError(x, ErrorSintatico.ERROR_NON_TERMINAL));
+            	throw new SyntaticError(getError(x));
         }
         else // isSemanticAction(x)
         {
@@ -115,17 +115,23 @@ public class Sintatico implements Constants
             ;
     }
     
-    private String getError(int index, ErrorSintatico errorType) {
-    	String msg = "Erro na linha " + Integer.toString( currentToken.getLine()) + " - encontrado ";
+    private String getError(int index) {
+    	String msg = "Erro na linha " + Integer.toString( currentToken.getLine()) +
+    			     //" posição: " + currentToken.getPosition() +
+    			     " - encontrado ";
     	
-    	if (errorType == ErrorSintatico.ERROR_TERMINAL){
-    		msg = msg + currentToken.getClasse() + " (" + currentToken.getLexeme() + ") "; 
+    	/*if (errorType == ErrorSintatico.ERROR_TERMINAL){
+    		
     	}else{
-    		if (currentToken.getLexeme().equals("$"))
-    			msg = msg + "EOF ";
-    		else
-    			msg = msg + currentToken.getLexeme() + " ";
-    	}
+    		
+    	}*/
+    	if (currentToken.getClasse().equals("identificador")){
+			msg = msg + currentToken.getClasse() + " (" + currentToken.getLexeme() + ") ";
+		}else if (currentToken.getLexeme().equals("$")){
+			msg = msg + "EOF ";
+		}else{
+			msg = msg + currentToken.getLexeme() + " ";
+		}	
     	
     	return msg + PARSER_ERROR[index];
 	}
