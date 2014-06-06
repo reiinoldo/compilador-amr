@@ -23,10 +23,10 @@ public class Semantico implements Constants {
 			action4();
 			break;
 		case 5:
-			action5();
+			action5(token);
 			break;
 		case 6:
-			action6();
+			action6(token);
 			break;
 		case 7:
 			action7();
@@ -85,21 +85,27 @@ public class Semantico implements Constants {
 	}
 
 	private void action1() {
+		codigoIntermediario.append("     add");
 	}
 
 	private void action2() {
+		codigoIntermediario.append("     sub");
 	}
 
 	private void action3() {
+		codigoIntermediario.append("     mul");
 	}
 
 	private void action4() {
+		codigoIntermediario.append("     div");
 	}
 
-	private void action5() {
+	private void action5(Token token) {
+		codigoIntermediario.append("     ldc.i8 " + token.getLexeme());
 	}
 
-	private void action6() {
+	private void action6(Token token) {
+		codigoIntermediario.append("     ldc.r8 " + token.getLexeme());
 	}
 
 	private void action7() {
@@ -124,12 +130,25 @@ public class Semantico implements Constants {
 	}
 
 	private void action14() {
+		codigoIntermediario.append("     call void [mscorlib]System.Console::Write(int64)");
 	}
 
 	private void action15() {
+		  codigoIntermediario.append (".assembly extern mscorlib{}");
+		  codigoIntermediario.append (".assembly " + fileName + "{}");
+		  codigoIntermediario.append (".module " + fileName + ".exe");
+		  codigoIntermediario.append ("");
+		  codigoIntermediario.append (".class public " + fileName + " {");
+		  codigoIntermediario.append ("  .method public static void _principal ()");
+		  codigoIntermediario.append ("  {");
+		  codigoIntermediario.append ("     .entrypoint");
 	}
 
 	private void action16() {
+		  ShowMessage ("Ação: " + IntToStr (action) + " - reconhecimento de fim de programa");
+		  codigoIntermediario.append ("     ret");
+		  codigoIntermediario.append ("  }");
+		  codigoIntermediario.append ("}");
 	}
 
 	private void action17() {
