@@ -5,9 +5,9 @@ Language = Java
 ScannerName = Lexico
 ParserName = Sintatico
 SemanticName = Semantico
-ScannerCaseSensitive = true
+ScannerCaseSensitive = false
 ScannerTable = Compact
-Input = Stream
+Input = String
 Parser = LL
 #RegularDefinitions
 min: [a-z]
@@ -119,7 +119,7 @@ pr_return = identificador: "return"
 <termo1>
 <fator1>
 #Grammar
-<programa> ::= pr_main <var_glob> <lista_mod> <lista_cmd> pr_end ;
+<programa> ::= #15 pr_main <var_glob> <lista_mod> <lista_cmd> pr_end #16;
 <var_glob> ::= î | pr_global <variaveis> <var_glob> ;
 <variaveis>::= <tipo> <lista_id> <valor> ";" ;
 <tipo> ::= pr_boolean | pr_float | pr_integer | pr_string ;
@@ -141,22 +141,22 @@ pr_return = identificador: "return"
 <comando> ::= identificador <comando1> | <cmd_entrada> | <cmd_saida> | <cmd_selecao> | <cmd_repeticao> ;
 <comando1> ::= "=" <expressao> ";" | "(" <param_reais> ")" ";" ;
 <cmd_entrada> ::= pr_scan "(" <lista_id> ")" ";" ;
-<cmd_saida> ::= pr_print "(" <lista_expr> ")" ";"| pr_println "(" <lista_expr> ")" ";" ;
-<lista_expr>::= <expressao> <lista_expr1> ;
+<cmd_saida> ::= pr_print "(" <lista_expr> ")" ";"| pr_println "(" <lista_expr> #17 ")" ";" ;
+<lista_expr>::= <expressao> #14 <lista_expr1> ;
 <lista_expr1> ::= î |  "," <lista_expr> ";" ;
 <cmd_selecao> ::= pr_if "(" <expressao> ")" <lista_cmd> <else> pr_end ";" ;
 <else> ::= î | pr_else <lista_cmd> ;
 <cmd_repeticao> ::= pr_do <lista_cmd> pr_while "(" <expressao> ")" ";" ;
 <param_reais> ::= î | <lista_expr> ;
 <expressao> ::= <elemento> <expressao1> ;
-<expressao1> ::= î | "||"  <elemento> <expressao1> | "&&" <elemento> <expressao1> ;
-<elemento> ::= <relacional> | pr_true | pr_false |  "!" <elemento> ;
+<expressao1> ::= î | "||"  <elemento> #18 <expressao1> | "&&" <elemento> #19 <expressao1> ;
+<elemento> ::= <relacional> | pr_true #11 | pr_false #12 |  "!" <elemento> #13 ;
 <relacional> ::= <aritmetica> <relacional1> ;
-<relacional1> ::= <operador_relacional> <aritmetica> | î ;
+<relacional1> ::= <operador_relacional> #20 <aritmetica> #21 | î ;
 <operador_relacional> ::= "==" | "!=" | "<" | "<=" | ">" | ">=" ;
 <aritmetica> ::= <termo> <aritmetica1>;
-<aritmetica1> ::= î | "+" <termo> <aritmetica1> | "-" <termo> <aritmetica1> ;
+<aritmetica1> ::= î | "+" <termo> #1 <aritmetica1> | "-" <termo> #2 <aritmetica1> ;
 <termo> ::= <fator> <termo1> ;
-<termo1> ::= î | "*" <fator> <termo1> | "/" <fator> <termo1> ;
-<fator> ::= identificador <fator1> | const_integer | const_float | const_string | "(" <expressao> ")" | "+" <fator> | "-" <fator> ;
+<termo1> ::= î | "*" <fator> #3 <termo1> | "/" <fator> #4 <termo1> ;
+<fator> ::= identificador <fator1> | const_integer #5 | const_float #6 | const_string #22 | "(" <expressao> ")" | "+" <fator> #23 | "-" <fator> #7 ;
 <fator1> ::= î | "(" <lista_expr> ")" ;
