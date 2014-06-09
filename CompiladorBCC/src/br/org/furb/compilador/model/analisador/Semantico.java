@@ -1,10 +1,10 @@
 package br.org.furb.compilador.model.analisador;
 
 public class Semantico implements Constants {
-	private StringBuilder codigoIntermediario;
+	private StringBuilder codigo;
 
 	public Semantico() {
-		codigoIntermediario = new StringBuilder();
+		codigo = new StringBuilder();
 	}
 
 	public void executeAction(int action, Token token) throws SemanticError {
@@ -85,27 +85,27 @@ public class Semantico implements Constants {
 	}
 
 	private void action1() {
-		codigoIntermediario.append("     add");
+		codigo.append("     add");
 	}
 
 	private void action2() {
-		codigoIntermediario.append("     sub");
+		codigo.append("     sub");
 	}
 
 	private void action3() {
-		codigoIntermediario.append("     mul");
+		codigo.append("     mul");
 	}
 
 	private void action4() {
-		codigoIntermediario.append("     div");
+		codigo.append("     div");
 	}
 
 	private void action5(Token token) {
-		codigoIntermediario.append("     ldc.i8 " + token.getLexeme());
+		codigo.append("     ldc.i8 " + token.getLexeme());
 	}
 
 	private void action6(Token token) {
-		codigoIntermediario.append("     ldc.r8 " + token.getLexeme());
+		codigo.append("     ldc.r8 " + token.getLexeme());
 	}
 
 	private void action7() {
@@ -130,25 +130,25 @@ public class Semantico implements Constants {
 	}
 
 	private void action14() {
-		codigoIntermediario.append("     call void [mscorlib]System.Console::Write(int64)");
+		codigo.append("     call void [mscorlib]System.Console::Write(int64)");
 	}
 
 	private void action15() {
-		  codigoIntermediario.append (".assembly extern mscorlib{}");
-		  codigoIntermediario.append (".assembly " + fileName + "{}");
-		  codigoIntermediario.append (".module " + fileName + ".exe");
-		  codigoIntermediario.append ("");
-		  codigoIntermediario.append (".class public " + fileName + " {");
-		  codigoIntermediario.append ("  .method public static void _principal ()");
-		  codigoIntermediario.append ("  {");
-		  codigoIntermediario.append ("     .entrypoint");
+		  codigo.append (".assembly extern mscorlib{}");
+		  codigo.append (".assembly " + fileName + "{}");
+		  codigo.append (".module " + fileName + ".exe");
+		  codigo.append ("");
+		  codigo.append (".class public " + fileName + " {");
+		  codigo.append ("  .method public static void _principal ()");
+		  codigo.append ("  {");
+		  codigo.append ("     .entrypoint");
 	}
 
 	private void action16() {
 		  ShowMessage ("Ação: " + IntToStr (action) + " - reconhecimento de fim de programa");
-		  codigoIntermediario.append ("     ret");
-		  codigoIntermediario.append ("  }");
-		  codigoIntermediario.append ("}");
+		  codigo.append ("     ret");
+		  codigo.append ("  }");
+		  codigo.append ("}");
 	}
 
 	private void action17() {
