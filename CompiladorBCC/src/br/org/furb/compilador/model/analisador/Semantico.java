@@ -56,7 +56,7 @@ public class Semantico implements Constants {
 			action15();
 			break;
 		case 16:
-			action16();
+			action16(action);
 			break;
 		case 17:
 			action17();
@@ -135,20 +135,21 @@ public class Semantico implements Constants {
 
 	private void action15() {
 		  codigo.append (".assembly extern mscorlib{}");
-		  codigo.append (".assembly " + fileName + "{}");
-		  codigo.append (".module " + fileName + ".exe");
+		  codigo.append (".assembly " + /*fileName + */ "{}");
+		  codigo.append (".module " + /*fileName + */ ".exe");
 		  codigo.append ("");
-		  codigo.append (".class public " + fileName + " {");
+		  codigo.append (".class public " + /*fileName + */ " {");
 		  codigo.append ("  .method public static void _principal ()");
 		  codigo.append ("  {");
 		  codigo.append ("     .entrypoint");
 	}
 
-	private void action16() {
-		  ShowMessage ("Ação: " + IntToStr (action) + " - reconhecimento de fim de programa");
+	private void action16(int action) {
+		  System.out.println("Ação: " + action + " - reconhecimento de fim de programa");
 		  codigo.append ("     ret");
 		  codigo.append ("  }");
 		  codigo.append ("}");
+		  System.out.println(codigo.toString());
 	}
 
 	private void action17() {
