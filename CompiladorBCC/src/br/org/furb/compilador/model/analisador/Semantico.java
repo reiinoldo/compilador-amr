@@ -1,17 +1,29 @@
 package br.org.furb.compilador.model.analisador;
 
+import java.util.Stack;
+
+import br.org.furb.compilador.model.Tipo;
+
 public class Semantico implements Constants {
 	private StringBuilder codigo;
+	private Stack<Tipo> tipos;
+	private String fileName;
 
-	public Semantico() {
+	public Semantico(String fileName) {
+		this.fileName = fileName;
 		codigo = new StringBuilder();
+		tipos = new Stack<Tipo>();
+	}
+
+	private void appendln(String text) {
+		codigo.append(text + "\n");
 	}
 
 	public void executeAction(int action, Token token) throws SemanticError {
 		System.out.println("Ação #" + action + ", Token: " + token);
 		switch (action) {
 		case 1:
-			action1();
+			action1(token);
 			break;
 		case 2:
 			action2();
@@ -84,31 +96,42 @@ public class Semantico implements Constants {
 		}
 	}
 
-	private void action1() {
-		codigo.append("     add");
+	private void action1(Token token) throws SemanticError {
+		Tipo tipo1 = tipos.pop();
+		Tipo tipo2 = tipos.pop();
+		if(tipo1 !=  Tipo.CTE_FLOAT && tipo1 != Tipo.CTE_INTEGER){
+			throw new SemanticError("encontrado ("+token.getClasse()+") esperado (constante float ou constante inteira)");
+		}
+		if (tipo1 == Tipo.CTE_FLOAT || tipo2 == Tipo.CTE_FLOAT) {
+			tipos.push(Tipo.CTE_FLOAT);
+		} else if (tipo1 == Tipo.CTE_INTEGER && tipo2 == Tipo.CTE_INTEGER) {
+			tipos.push(Tipo.CTE_INTEGER);
+		} 
+		appendln("     add");
 	}
 
 	private void action2() {
-		codigo.append("     sub");
+		appendln("     sub");
 	}
 
 	private void action3() {
-		codigo.append("     mul");
+		appendln("     mul");
 	}
 
 	private void action4() {
-		codigo.append("     div");
+		appendln("     div");
 	}
 
 	private void action5(Token token) {
-		codigo.append("     ldc.i8 " + token.getLexeme());
+		appendln("     ldc.i8 " + token.getLexeme());
 	}
 
 	private void action6(Token token) {
-		codigo.append("     ldc.r8 " + token.getLexeme());
+		appendln("     ldc.r8 " + token.getLexeme());
 	}
 
 	private void action7() {
+
 	}
 
 	private void action8() {
@@ -130,26 +153,27 @@ public class Semantico implements Constants {
 	}
 
 	private void action14() {
-		codigo.append("     call void [mscorlib]System.Console::Write(int64)");
+		appendln("     call void [mscorlib]System.Console::Write(int64)");
 	}
 
 	private void action15() {
-		  codigo.append (".assembly extern mscorlib{}");
-		  codigo.append (".assembly " + /*fileName + */ "{}");
-		  codigo.append (".module " + /*fileName + */ ".exe");
-		  codigo.append ("");
-		  codigo.append (".class public " + /*fileName + */ " {");
-		  codigo.append ("  .method public static void _principal ()");
-		  codigo.append ("  {");
-		  codigo.append ("     .entrypoint");
+		appendln(".assembly extern mscorlib{}");
+		appendln(".assembly " + fileName + "{}");
+		appendln(".module " + fileName + ".exe");
+		appendln("");
+		appendln(".class public " + fileName + " {");
+		appendln("  .method public static void _principal ()");
+		appendln("  {");
+		appendln("     .entrypoint");
 	}
 
 	private void action16(int action) {
-		  System.out.println("Ação: " + action + " - reconhecimento de fim de programa");
-		  codigo.append ("     ret");
-		  codigo.append ("  }");
-		  codigo.append ("}");
-		  System.out.println(codigo.toString());
+		System.out.println("Ação: " + action
+				+ " - reconhecimento de fim de programa");
+		appendln("     ret");
+		appendln("  }");
+		appendln("}");
+		System.out.println(codigo.toString());
 	}
 
 	private void action17() {
