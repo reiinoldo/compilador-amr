@@ -6,13 +6,17 @@ import br.org.furb.compilador.model.Tipo;
 
 public class Semantico implements Constants {
 	private StringBuilder codigo;
-	private Stack<Tipo> tipos;
+	private Stack<Tipo> pilhaTipos;
 	private String fileName;
 
 	public Semantico(String fileName) {
 		this.fileName = fileName;
 		codigo = new StringBuilder();
-		tipos = new Stack<Tipo>();
+		pilhaTipos = new Stack<Tipo>();
+	}
+
+	public String getCodigo() {
+		return codigo.toString();
 	}
 
 	private void appendln(String text) {
@@ -68,7 +72,7 @@ public class Semantico implements Constants {
 			action15();
 			break;
 		case 16:
-			action16(action);
+			action16();
 			break;
 		case 17:
 			action17();
@@ -86,7 +90,7 @@ public class Semantico implements Constants {
 			action21();
 			break;
 		case 22:
-			action22();
+			action22(token);
 			break;
 		case 23:
 			action23();
@@ -97,16 +101,26 @@ public class Semantico implements Constants {
 	}
 
 	private void action1(Token token) throws SemanticError {
-		Tipo tipo1 = tipos.pop();
-		Tipo tipo2 = tipos.pop();
-		if(tipo1 !=  Tipo.CTE_FLOAT && tipo1 != Tipo.CTE_INTEGER){
-			throw new SemanticError("encontrado ("+token.getClasse()+") esperado (constante float ou constante inteira)");
+		Tipo tipo1 = pilhaTipos.pop();
+		Tipo tipo2 = pilhaTipos.pop();
+		if (tipo1 != Tipo.CTE_FLOAT && tipo1 != Tipo.CTE_INTEGER) {
+			throw new SemanticError("Erro na linha " + token.getLine()
+					+ " - encontrado " + tipo1.getNome() + " esperado "
+					+ Tipo.CTE_INTEGER.getNome() + " ou "
+					+ Tipo.CTE_FLOAT.getNome());
 		}
+		if (tipo2 != Tipo.CTE_FLOAT && tipo2 != Tipo.CTE_INTEGER) {
+			throw new SemanticError("Erro na linha " + token.getLine()
+					+ " - encontrado " + tipo2.getNome() + " esperado "
+					+ Tipo.CTE_INTEGER.getNome() + " ou "
+					+ Tipo.CTE_FLOAT.getNome());
+		}
+
 		if (tipo1 == Tipo.CTE_FLOAT || tipo2 == Tipo.CTE_FLOAT) {
-			tipos.push(Tipo.CTE_FLOAT);
+			pilhaTipos.push(Tipo.CTE_FLOAT);
 		} else if (tipo1 == Tipo.CTE_INTEGER && tipo2 == Tipo.CTE_INTEGER) {
-			tipos.push(Tipo.CTE_INTEGER);
-		} 
+			pilhaTipos.push(Tipo.CTE_INTEGER);
+		}
 		appendln("     add");
 	}
 
@@ -123,10 +137,12 @@ public class Semantico implements Constants {
 	}
 
 	private void action5(Token token) {
+		pilhaTipos.push(token.getTipo());
 		appendln("     ldc.i8 " + token.getLexeme());
 	}
 
 	private void action6(Token token) {
+		pilhaTipos.push(token.getTipo());
 		appendln("     ldc.r8 " + token.getLexeme());
 	}
 
@@ -167,13 +183,10 @@ public class Semantico implements Constants {
 		appendln("     .entrypoint");
 	}
 
-	private void action16(int action) {
-		System.out.println("Ação: " + action
-				+ " - reconhecimento de fim de programa");
+	private void action16() {
 		appendln("     ret");
 		appendln("  }");
 		appendln("}");
-		System.out.println(codigo.toString());
 	}
 
 	private void action17() {
@@ -188,10 +201,13 @@ public class Semantico implements Constants {
 	private void action20() {
 	}
 
-	private void action22() {
+	private void action21() {
+
 	}
 
-	private void action21() {
+	private void action22(Token token) {
+		pilhaTipos.push(token.getTipo());
+		appendln("     ldstr " + token.getLexeme());
 	}
 
 	private void action23() {
