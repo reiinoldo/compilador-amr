@@ -16,4 +16,13 @@ public enum Tipo {
 	public String getNome() {
 		return nome;
 	}
+	
+	public static Tipo getTipo(String nome){
+		for(Tipo tipo : values()){
+			if(tipo.getNome().equalsIgnoreCase(nome)){
+				return tipo;
+			}
+		}
+		return null;
+	}
 }

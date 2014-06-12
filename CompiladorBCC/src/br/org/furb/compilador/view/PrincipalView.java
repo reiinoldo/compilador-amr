@@ -43,6 +43,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.Element;
 
 import br.org.furb.compilador.controller.CompiladorController;
+import br.org.furb.compilador.util.FileUtil;
 
 public class PrincipalView extends JFrame {
 
@@ -103,9 +104,13 @@ public class PrincipalView extends JFrame {
 
 		btnSalvarEvt();
 
-		compilador = new CompiladorController(fileName);
-		textAreaMensagens.setText(compilador.compilar(textAreaCodigo.getText()
-				.toString()));
+		if (fileName != null) {
+
+			compilador = new CompiladorController(
+					FileUtil.getFileName(fileName), pathFile);
+			textAreaMensagens.setText(compilador.compilar(textAreaCodigo
+					.getText().toString()));
+		}
 	}
 
 	private void btnGerarCodigoEvt() {
