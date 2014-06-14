@@ -1,18 +1,28 @@
 package br.org.furb.compilador.model.analisador;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
-import br.org.furb.compilador.model.Tipo;
+import br.org.furb.compilador.model.TipoDado;
 
 public class Semantico implements Constants {
 	private StringBuilder codigo;
-	private Stack<Tipo> pilhaTipos;
+	private Stack<TipoDado> pilhaTipos;
 	private String fileName;
+	private Map<String, TipoDado> tabelaSimbolos;
+	private List<String> listaId;
+	private Stack<String> pilhaRotulos;
 
 	public Semantico(String fileName) {
 		this.fileName = fileName;
 		codigo = new StringBuilder();
-		pilhaTipos = new Stack<Tipo>();
+		pilhaTipos = new Stack<TipoDado>();
+		tabelaSimbolos = new HashMap<String, TipoDado>();
+		listaId = new ArrayList<String>();
+		pilhaRotulos = new Stack<String>();
 	}
 
 	public String getCodigo() {
@@ -101,25 +111,25 @@ public class Semantico implements Constants {
 	}
 
 	private void action1(Token token) throws SemanticError {
-		Tipo tipo1 = pilhaTipos.pop();
-		Tipo tipo2 = pilhaTipos.pop();
-		if (tipo1 != Tipo.CTE_FLOAT && tipo1 != Tipo.CTE_INTEGER) {
+		TipoDado tipo1 = pilhaTipos.pop();
+		TipoDado tipo2 = pilhaTipos.pop();
+		if (tipo1 != TipoDado.CTE_FLOAT && tipo1 != TipoDado.CTE_INTEGER) {
 			throw new SemanticError("Erro na linha " + token.getLine()
 					+ " - encontrado " + tipo1.getNome() + " esperado "
-					+ Tipo.CTE_INTEGER.getNome() + " ou "
-					+ Tipo.CTE_FLOAT.getNome());
+					+ TipoDado.CTE_INTEGER.getNome() + " ou "
+					+ TipoDado.CTE_FLOAT.getNome());
 		}
-		if (tipo2 != Tipo.CTE_FLOAT && tipo2 != Tipo.CTE_INTEGER) {
+		if (tipo2 != TipoDado.CTE_FLOAT && tipo2 != TipoDado.CTE_INTEGER) {
 			throw new SemanticError("Erro na linha " + token.getLine()
 					+ " - encontrado " + tipo2.getNome() + " esperado "
-					+ Tipo.CTE_INTEGER.getNome() + " ou "
-					+ Tipo.CTE_FLOAT.getNome());
+					+ TipoDado.CTE_INTEGER.getNome() + " ou "
+					+ TipoDado.CTE_FLOAT.getNome());
 		}
 
-		if (tipo1 == Tipo.CTE_FLOAT || tipo2 == Tipo.CTE_FLOAT) {
-			pilhaTipos.push(Tipo.CTE_FLOAT);
-		} else if (tipo1 == Tipo.CTE_INTEGER && tipo2 == Tipo.CTE_INTEGER) {
-			pilhaTipos.push(Tipo.CTE_INTEGER);
+		if (tipo1 == TipoDado.CTE_FLOAT || tipo2 == TipoDado.CTE_FLOAT) {
+			pilhaTipos.push(TipoDado.CTE_FLOAT);
+		} else if (tipo1 == TipoDado.CTE_INTEGER && tipo2 == TipoDado.CTE_INTEGER) {
+			pilhaTipos.push(TipoDado.CTE_INTEGER);
 		}
 		appendln("     add");
 	}
