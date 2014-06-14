@@ -1,6 +1,6 @@
 package br.org.furb.compilador.model.analisador;
 
-import br.org.furb.compilador.model.Tipo;
+import br.org.furb.compilador.model.TipoDado;
 import br.org.furb.compilador.util.StringUtil;
 
 public class Token {
@@ -40,13 +40,13 @@ public class Token {
 			classe = "identificador";
 			break;
 		case 3:
-			classe = Tipo.CTE_INTEGER.getNome();
+			classe = TipoDado.CTE_INTEGER.getNome();
 			break;
 		case 4:
-			classe = Tipo.CTE_FLOAT.getNome();
+			classe = TipoDado.CTE_FLOAT.getNome();
 			break;
 		case 5:
-			classe = Tipo.CTE_STRING.getNome();
+			classe = TipoDado.CTE_STRING.getNome();
 			break;
 		default:
 			if (id >= 6 && id <= 23)
@@ -60,16 +60,16 @@ public class Token {
 		return classe;
 	}
 
-	public Tipo getTipo() {
+	public TipoDado getTipo() {
 		switch (id) {
 		case 3:
-			return Tipo.CTE_INTEGER;
+			return TipoDado.CTE_INTEGER;
 		case 4:
-			return Tipo.CTE_FLOAT;
+			return TipoDado.CTE_FLOAT;
 		case 5:
-			return Tipo.CTE_STRING;
+			return TipoDado.CTE_STRING;
 		default:
-			return Tipo.NAO_IDENTIFICADO;
+			return TipoDado.NAO_IDENTIFICADO;
 		}
 	}
 
