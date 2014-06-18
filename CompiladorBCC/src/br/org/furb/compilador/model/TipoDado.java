@@ -4,7 +4,7 @@ public enum TipoDado {
 	CTE_INTEGER("constante integer", "int64"),
 	CTE_FLOAT("constante float", "float64"),
 	CTE_STRING("constante string", ""),
-	CTE_BOOLEAN("", "bool"),
+	CTE_BOOLEAN("expressão boolean", "bool"),
 	NAO_IDENTIFICADO("NAO IDENTIFICADO", "");
 	
 	private String nome;

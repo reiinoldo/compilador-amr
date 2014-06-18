@@ -40,13 +40,13 @@ public class Semantico implements Constants {
 			action1(token);
 			break;
 		case 2:
-			action2();
+			action2(token);
 			break;
 		case 3:
-			action3();
+			action3(token);
 			break;
 		case 4:
-			action4();
+			action4(token);
 			break;
 		case 5:
 			action5(token);
@@ -55,7 +55,7 @@ public class Semantico implements Constants {
 			action6(token);
 			break;
 		case 7:
-			action7();
+			action7(token);
 			break;
 		case 8:
 			action8();
@@ -88,10 +88,10 @@ public class Semantico implements Constants {
 			action17();
 			break;
 		case 18:
-			action18();
+			action18(token);
 			break;
 		case 19:
-			action19();
+			action19(token);
 			break;
 		case 20:
 			action20();
@@ -128,36 +128,98 @@ public class Semantico implements Constants {
 
 		if (tipo1 == TipoDado.CTE_FLOAT || tipo2 == TipoDado.CTE_FLOAT) {
 			pilhaTipos.push(TipoDado.CTE_FLOAT);
-		} else if (tipo1 == TipoDado.CTE_INTEGER && tipo2 == TipoDado.CTE_INTEGER) {
+		} else if (tipo1 == TipoDado.CTE_INTEGER
+				&& tipo2 == TipoDado.CTE_INTEGER) {
 			pilhaTipos.push(TipoDado.CTE_INTEGER);
 		}
 		appendln("     add");
 	}
 
-	private void action2() {
+	private void action2(Token token) throws SemanticError {
+		TipoDado tipo1 = pilhaTipos.pop();
+		TipoDado tipo2 = pilhaTipos.pop();
+		if (tipo1 != TipoDado.CTE_FLOAT && tipo1 != TipoDado.CTE_INTEGER) {
+			throw new SemanticError("Erro na linha " + token.getLine()
+					+ " - encontrado " + tipo1.getNome() + " esperado "
+					+ TipoDado.CTE_INTEGER.getNome() + " ou "
+					+ TipoDado.CTE_FLOAT.getNome());
+		}
+		if (tipo2 != TipoDado.CTE_FLOAT && tipo2 != TipoDado.CTE_INTEGER) {
+			throw new SemanticError("Erro na linha " + token.getLine()
+					+ " - encontrado " + tipo2.getNome() + " esperado "
+					+ TipoDado.CTE_INTEGER.getNome() + " ou "
+					+ TipoDado.CTE_FLOAT.getNome());
+		}
+		if (tipo1 == TipoDado.CTE_FLOAT || tipo2 == TipoDado.CTE_FLOAT) {
+			pilhaTipos.push(TipoDado.CTE_FLOAT);
+		} else if (tipo1 == TipoDado.CTE_INTEGER
+				&& tipo2 == TipoDado.CTE_INTEGER) {
+			pilhaTipos.push(TipoDado.CTE_INTEGER);
+		}
 		appendln("     sub");
 	}
 
-	private void action3() {
+	private void action3(Token token) throws SemanticError {
+		TipoDado tipo1 = pilhaTipos.pop();
+		TipoDado tipo2 = pilhaTipos.pop();
+		if (tipo1 != TipoDado.CTE_FLOAT && tipo1 != TipoDado.CTE_INTEGER) {
+			throw new SemanticError("Erro na linha " + token.getLine()
+					+ " - encontrado " + tipo1.getNome() + " esperado "
+					+ TipoDado.CTE_INTEGER.getNome() + " ou "
+					+ TipoDado.CTE_FLOAT.getNome());
+		}
+		if (tipo2 != TipoDado.CTE_FLOAT && tipo2 != TipoDado.CTE_INTEGER) {
+			throw new SemanticError("Erro na linha " + token.getLine()
+					+ " - encontrado " + tipo2.getNome() + " esperado "
+					+ TipoDado.CTE_INTEGER.getNome() + " ou "
+					+ TipoDado.CTE_FLOAT.getNome());
+		}
+		if (tipo1 == TipoDado.CTE_FLOAT || tipo2 == TipoDado.CTE_FLOAT) {
+			pilhaTipos.push(TipoDado.CTE_FLOAT);
+		} else if (tipo1 == TipoDado.CTE_INTEGER
+				&& tipo2 == TipoDado.CTE_INTEGER) {
+			pilhaTipos.push(TipoDado.CTE_INTEGER);
+		}
 		appendln("     mul");
 	}
 
-	private void action4() {
+	private void action4(Token token) throws SemanticError {
+		TipoDado tipo1 = pilhaTipos.pop();
+		TipoDado tipo2 = pilhaTipos.pop();
+		if (tipo1 != TipoDado.CTE_FLOAT && tipo1 != TipoDado.CTE_INTEGER) {
+			throw new SemanticError("Erro na linha " + token.getLine()
+					+ " - encontrado " + tipo1.getNome() + " esperado "
+					+ TipoDado.CTE_INTEGER.getNome() + " ou "
+					+ TipoDado.CTE_FLOAT.getNome());
+		}
+		if (tipo2 != TipoDado.CTE_FLOAT && tipo2 != TipoDado.CTE_INTEGER) {
+			throw new SemanticError("Erro na linha " + token.getLine()
+					+ " - encontrado " + tipo2.getNome() + " esperado "
+					+ TipoDado.CTE_INTEGER.getNome() + " ou "
+					+ TipoDado.CTE_FLOAT.getNome());
+		}
+		pilhaTipos.push(TipoDado.CTE_FLOAT);
 		appendln("     div");
 	}
 
+	// carrega constante integer
 	private void action5(Token token) {
 		pilhaTipos.push(token.getTipo());
 		appendln("     ldc.i8 " + token.getLexeme());
+
 	}
 
+	// carrega constante float
 	private void action6(Token token) {
 		pilhaTipos.push(token.getTipo());
 		appendln("     ldc.r8 " + token.getLexeme());
 	}
 
-	private void action7() {
-
+	// inveter sinal
+	private void action7(Token token) throws SemanticError {
+		pilhaTipos.push(TipoDado.CTE_INTEGER);
+		appendln("     ldc.i8 -1");
+		action3(token);
 	}
 
 	private void action8() {
@@ -169,19 +231,54 @@ public class Semantico implements Constants {
 	private void action10() {
 	}
 
+	// empilha true
 	private void action11() {
+		pilhaTipos.push(TipoDado.CTE_BOOLEAN);
+		appendln("     ldc.i4.1");
 	}
 
+	// empilha false
 	private void action12() {
+		pilhaTipos.push(TipoDado.CTE_BOOLEAN);
+		appendln("     ldc.i4.0");
 	}
 
-	private void action13() {
+	// negação
+	private void action13() throws SemanticError {
+		TipoDado tipo = pilhaTipos.pop();
+		if (tipo == TipoDado.CTE_BOOLEAN) {
+			appendln("     ldc.i4.1");
+			appendln("     xor");
+		} else {
+			throw new SemanticError("Esperado expressão boolean encontrado "
+					+ tipo.getNome());
+		}
 	}
 
-	private void action14() {
-		appendln("     call void [mscorlib]System.Console::Write(int64)");
+	// print
+	private void action14() throws SemanticError {
+		TipoDado tipoDado = pilhaTipos.pop();
+		switch (tipoDado) {
+		case CTE_BOOLEAN:
+			appendln("     call void [mscorlib]System.Console::Write(bool)");
+			break;
+		case CTE_FLOAT:
+			appendln("     call void [mscorlib]System.Console::Write(float64)");
+			break;
+		case CTE_INTEGER:
+			appendln("     call void [mscorlib]System.Console::Write(int64)");
+			break;
+		case CTE_STRING:
+			appendln("     call void [mscorlib]System.Console::Write(string)");
+			break;
+		// case NAO_IDENTIFICADO:
+		// break;
+		default:
+			throw new SemanticError("Tipo de expressão inválida");
+		}
 	}
 
+	// inicio do programa
 	private void action15() {
 		appendln(".assembly extern mscorlib{}");
 		appendln(".assembly " + fileName + "{}");
@@ -193,22 +290,59 @@ public class Semantico implements Constants {
 		appendln("     .entrypoint");
 	}
 
+	// fim do programa
 	private void action16() {
 		appendln("     ret");
 		appendln("  }");
 		appendln("}");
 	}
 
+	// println
 	private void action17() {
+		appendln("     ldstr \"\n\"");
+		appendln("     call void [mscorlib]System.Console::Write(string)");
 	}
 
-	private void action18() {
+	// OR
+	private void action18(Token token) throws SemanticError {
+		TipoDado tipo1 = pilhaTipos.pop();
+		TipoDado tipo2 = pilhaTipos.pop();
+		if (tipo1 != TipoDado.CTE_BOOLEAN) {
+			throw new SemanticError("Erro na linha " + token.getLine()
+					+ " - encontrado " + tipo1.getNome() + " esperado "
+					+ TipoDado.CTE_BOOLEAN.getNome());
+		}
+		if (tipo2 != TipoDado.CTE_BOOLEAN) {
+			throw new SemanticError("Erro na linha " + token.getLine()
+					+ " - encontrado " + tipo2.getNome() + " esperado "
+					+ TipoDado.CTE_BOOLEAN.getNome());
+
+		}
+		pilhaTipos.push(TipoDado.CTE_BOOLEAN);
+		appendln("     or");
 	}
 
-	private void action19() {
+	// AND
+	private void action19(Token token) throws SemanticError {
+		TipoDado tipo1 = pilhaTipos.pop();
+		TipoDado tipo2 = pilhaTipos.pop();
+		if (tipo1 != TipoDado.CTE_BOOLEAN) {
+			throw new SemanticError("Erro na linha " + token.getLine()
+					+ " - encontrado " + tipo1.getNome() + " esperado "
+					+ TipoDado.CTE_BOOLEAN.getNome());
+		}
+		if (tipo2 != TipoDado.CTE_BOOLEAN) {
+			throw new SemanticError("Erro na linha " + token.getLine()
+					+ " - encontrado " + tipo2.getNome() + " esperado "
+					+ TipoDado.CTE_BOOLEAN.getNome());
+
+		}
+		pilhaTipos.push(TipoDado.CTE_BOOLEAN);
+		appendln("     and");
 	}
 
 	private void action20() {
+		
 	}
 
 	private void action21() {
