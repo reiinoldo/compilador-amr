@@ -43,12 +43,13 @@ public class CompiladorController {
 			return "Erro ao compilar com o ilasm.exe: " + e.getMessage();
 		} catch (Exception e) {
 			return "Erro ao compilar: " + e.getMessage();
+		} finally{
+			System.out.println(semantico.getCodigo());
 		}
 	}
 
 	private void compilarIlasm(String codigoGerado) throws BuildException,
 			Exception {
-		System.out.println(codigoGerado);
 		String objFilePath = FileUtil.writeFile(codigoGerado, pathFile,
 				fileName);
 		IlasmBuilder

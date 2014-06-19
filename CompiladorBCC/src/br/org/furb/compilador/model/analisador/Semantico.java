@@ -73,7 +73,7 @@ public class Semantico implements Constants {
 			action12();
 			break;
 		case 13:
-			action13();
+			action13(token);
 			break;
 		case 14:
 			action14();
@@ -114,18 +114,15 @@ public class Semantico implements Constants {
 		TipoDado tipo1 = pilhaTipos.pop();
 		TipoDado tipo2 = pilhaTipos.pop();
 		if (tipo1 != TipoDado.CTE_FLOAT && tipo1 != TipoDado.CTE_INTEGER) {
-			throw new SemanticError("Erro na linha " + token.getLine()
-					+ " - encontrado " + tipo1.getNome() + " esperado "
-					+ TipoDado.CTE_INTEGER.getNome() + " ou "
-					+ TipoDado.CTE_FLOAT.getNome());
+			throw new SemanticError(token.getLine(), tipo1.getNome(),
+					TipoDado.CTE_INTEGER.getNome() + " ou "
+							+ TipoDado.CTE_FLOAT.getNome());
 		}
 		if (tipo2 != TipoDado.CTE_FLOAT && tipo2 != TipoDado.CTE_INTEGER) {
-			throw new SemanticError("Erro na linha " + token.getLine()
-					+ " - encontrado " + tipo2.getNome() + " esperado "
-					+ TipoDado.CTE_INTEGER.getNome() + " ou "
-					+ TipoDado.CTE_FLOAT.getNome());
+			throw new SemanticError(token.getLine(), tipo2.getNome(),
+					TipoDado.CTE_INTEGER.getNome() + " ou "
+							+ TipoDado.CTE_FLOAT.getNome());
 		}
-
 		if (tipo1 == TipoDado.CTE_FLOAT || tipo2 == TipoDado.CTE_FLOAT) {
 			pilhaTipos.push(TipoDado.CTE_FLOAT);
 		} else if (tipo1 == TipoDado.CTE_INTEGER
@@ -139,16 +136,14 @@ public class Semantico implements Constants {
 		TipoDado tipo1 = pilhaTipos.pop();
 		TipoDado tipo2 = pilhaTipos.pop();
 		if (tipo1 != TipoDado.CTE_FLOAT && tipo1 != TipoDado.CTE_INTEGER) {
-			throw new SemanticError("Erro na linha " + token.getLine()
-					+ " - encontrado " + tipo1.getNome() + " esperado "
-					+ TipoDado.CTE_INTEGER.getNome() + " ou "
-					+ TipoDado.CTE_FLOAT.getNome());
+			throw new SemanticError(token.getLine(), tipo1.getNome(),
+					TipoDado.CTE_INTEGER.getNome() + " ou "
+							+ TipoDado.CTE_FLOAT.getNome());
 		}
 		if (tipo2 != TipoDado.CTE_FLOAT && tipo2 != TipoDado.CTE_INTEGER) {
-			throw new SemanticError("Erro na linha " + token.getLine()
-					+ " - encontrado " + tipo2.getNome() + " esperado "
-					+ TipoDado.CTE_INTEGER.getNome() + " ou "
-					+ TipoDado.CTE_FLOAT.getNome());
+			throw new SemanticError(token.getLine(), tipo2.getNome(),
+					TipoDado.CTE_INTEGER.getNome() + " ou "
+							+ TipoDado.CTE_FLOAT.getNome());
 		}
 		if (tipo1 == TipoDado.CTE_FLOAT || tipo2 == TipoDado.CTE_FLOAT) {
 			pilhaTipos.push(TipoDado.CTE_FLOAT);
@@ -163,16 +158,14 @@ public class Semantico implements Constants {
 		TipoDado tipo1 = pilhaTipos.pop();
 		TipoDado tipo2 = pilhaTipos.pop();
 		if (tipo1 != TipoDado.CTE_FLOAT && tipo1 != TipoDado.CTE_INTEGER) {
-			throw new SemanticError("Erro na linha " + token.getLine()
-					+ " - encontrado " + tipo1.getNome() + " esperado "
-					+ TipoDado.CTE_INTEGER.getNome() + " ou "
-					+ TipoDado.CTE_FLOAT.getNome());
+			throw new SemanticError(token.getLine(), tipo1.getNome(),
+					TipoDado.CTE_INTEGER.getNome() + " ou "
+							+ TipoDado.CTE_FLOAT.getNome());
 		}
 		if (tipo2 != TipoDado.CTE_FLOAT && tipo2 != TipoDado.CTE_INTEGER) {
-			throw new SemanticError("Erro na linha " + token.getLine()
-					+ " - encontrado " + tipo2.getNome() + " esperado "
-					+ TipoDado.CTE_INTEGER.getNome() + " ou "
-					+ TipoDado.CTE_FLOAT.getNome());
+			throw new SemanticError(token.getLine(), tipo2.getNome(),
+					TipoDado.CTE_INTEGER.getNome() + " ou "
+							+ TipoDado.CTE_FLOAT.getNome());
 		}
 		if (tipo1 == TipoDado.CTE_FLOAT || tipo2 == TipoDado.CTE_FLOAT) {
 			pilhaTipos.push(TipoDado.CTE_FLOAT);
@@ -187,16 +180,14 @@ public class Semantico implements Constants {
 		TipoDado tipo1 = pilhaTipos.pop();
 		TipoDado tipo2 = pilhaTipos.pop();
 		if (tipo1 != TipoDado.CTE_FLOAT && tipo1 != TipoDado.CTE_INTEGER) {
-			throw new SemanticError("Erro na linha " + token.getLine()
-					+ " - encontrado " + tipo1.getNome() + " esperado "
-					+ TipoDado.CTE_INTEGER.getNome() + " ou "
-					+ TipoDado.CTE_FLOAT.getNome());
+			throw new SemanticError(token.getLine(), tipo1.getNome(),
+					TipoDado.CTE_INTEGER.getNome() + " ou "
+							+ TipoDado.CTE_FLOAT.getNome());
 		}
 		if (tipo2 != TipoDado.CTE_FLOAT && tipo2 != TipoDado.CTE_INTEGER) {
-			throw new SemanticError("Erro na linha " + token.getLine()
-					+ " - encontrado " + tipo2.getNome() + " esperado "
-					+ TipoDado.CTE_INTEGER.getNome() + " ou "
-					+ TipoDado.CTE_FLOAT.getNome());
+			throw new SemanticError(token.getLine(), tipo2.getNome(),
+					TipoDado.CTE_INTEGER.getNome() + " ou "
+							+ TipoDado.CTE_FLOAT.getNome());
 		}
 		pilhaTipos.push(TipoDado.CTE_FLOAT);
 		appendln("     div");
@@ -244,14 +235,15 @@ public class Semantico implements Constants {
 	}
 
 	// negação
-	private void action13() throws SemanticError {
+	private void action13(Token token) throws SemanticError {
 		TipoDado tipo = pilhaTipos.pop();
 		if (tipo == TipoDado.CTE_BOOLEAN) {
+			pilhaTipos.push(TipoDado.CTE_BOOLEAN);
 			appendln("     ldc.i4.1");
 			appendln("     xor");
 		} else {
-			throw new SemanticError("Esperado expressão boolean encontrado "
-					+ tipo.getNome());
+			throw new SemanticError(token.getLine(), tipo.getNome(),
+					TipoDado.CTE_BOOLEAN.getNome());
 		}
 	}
 
@@ -299,7 +291,7 @@ public class Semantico implements Constants {
 
 	// println
 	private void action17() {
-		appendln("     ldstr \"\n\"");
+		appendln("     ldstr \"\\n\"");
 		appendln("     call void [mscorlib]System.Console::Write(string)");
 	}
 
@@ -308,15 +300,12 @@ public class Semantico implements Constants {
 		TipoDado tipo1 = pilhaTipos.pop();
 		TipoDado tipo2 = pilhaTipos.pop();
 		if (tipo1 != TipoDado.CTE_BOOLEAN) {
-			throw new SemanticError("Erro na linha " + token.getLine()
-					+ " - encontrado " + tipo1.getNome() + " esperado "
-					+ TipoDado.CTE_BOOLEAN.getNome());
+			throw new SemanticError(token.getLine(), tipo1.getNome(),
+					TipoDado.CTE_BOOLEAN.getNome());
 		}
 		if (tipo2 != TipoDado.CTE_BOOLEAN) {
-			throw new SemanticError("Erro na linha " + token.getLine()
-					+ " - encontrado " + tipo2.getNome() + " esperado "
-					+ TipoDado.CTE_BOOLEAN.getNome());
-
+			throw new SemanticError(token.getLine(), tipo2.getNome(),
+					TipoDado.CTE_BOOLEAN.getNome());
 		}
 		pilhaTipos.push(TipoDado.CTE_BOOLEAN);
 		appendln("     or");
@@ -327,22 +316,19 @@ public class Semantico implements Constants {
 		TipoDado tipo1 = pilhaTipos.pop();
 		TipoDado tipo2 = pilhaTipos.pop();
 		if (tipo1 != TipoDado.CTE_BOOLEAN) {
-			throw new SemanticError("Erro na linha " + token.getLine()
-					+ " - encontrado " + tipo1.getNome() + " esperado "
-					+ TipoDado.CTE_BOOLEAN.getNome());
+			throw new SemanticError(token.getLine(), tipo1.getNome(),
+					TipoDado.CTE_BOOLEAN.getNome());
 		}
 		if (tipo2 != TipoDado.CTE_BOOLEAN) {
-			throw new SemanticError("Erro na linha " + token.getLine()
-					+ " - encontrado " + tipo2.getNome() + " esperado "
-					+ TipoDado.CTE_BOOLEAN.getNome());
-
+			throw new SemanticError(token.getLine(), tipo2.getNome(),
+					TipoDado.CTE_BOOLEAN.getNome());
 		}
 		pilhaTipos.push(TipoDado.CTE_BOOLEAN);
 		appendln("     and");
 	}
 
 	private void action20() {
-		
+
 	}
 
 	private void action21() {
