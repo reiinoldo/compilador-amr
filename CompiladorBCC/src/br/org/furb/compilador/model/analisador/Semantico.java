@@ -150,7 +150,7 @@ public class Semantico implements Constants {
 			action34();
 			break;
 		case 35:
-			action35();
+			action35(token);
 			break;
 		default:
 			break;
@@ -536,11 +536,13 @@ public class Semantico implements Constants {
 		appendln("     brfalse " + rotuloFalse);
 	}
 
+	// final do if
 	private void action32() {
 		String rotuloFinal = pilhaRotulos.pop();
 		appendln("  " + rotuloFinal + ":");
 	}
 
+	// else
 	private void action33() {
 		String rotuloFalse = pilhaRotulos.pop();
 		String rotuloFinal = getNextRotulo();
@@ -549,9 +551,21 @@ public class Semantico implements Constants {
 		appendln("  " + rotuloFalse + ":");
 	}
 
+	// inicio do-while
 	private void action34() {
+		String rotulo = getNextRotulo();
+		pilhaRotulos.push(rotulo);
+		appendln("  " + rotulo + ":");
 	}
 
-	private void action35() {
+	// condição do-while
+	private void action35(Token token) throws SemanticError {
+		TipoDado tipo = pilhaTipos.pop();
+		if (tipo != TipoDado.CTE_BOOLEAN) {
+			throw new SemanticError("Erro na linha " + token.getLine()
+					+ " - esperado expressão boleana.");
+		}
+		
+		appendln("     brtrue "+pilhaRotulos.pop());
 	}
 }
