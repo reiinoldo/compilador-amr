@@ -18,6 +18,7 @@ public class Semantico implements Constants {
 	private TipoDado tipoAtual;
 
 	private Token tokenRelacional = null;
+	private long proxRotulo = 0;
 
 	public Semantico(String fileName) {
 		this.fileName = fileName;
@@ -26,6 +27,12 @@ public class Semantico implements Constants {
 		tabelaSimbolos = new HashMap<String, TipoDado>();
 		listaId = new ArrayList<String>();
 		pilhaRotulos = new Stack<String>();
+	}
+
+	private String getNextRotulo() {
+		proxRotulo++;
+
+		return "L" + proxRotulo;
 	}
 
 	public String getCodigo() {
@@ -131,7 +138,7 @@ public class Semantico implements Constants {
 			action30();
 			break;
 		case 31:
-			action31();
+			action31(token);
 			break;
 		case 32:
 			action32();
@@ -499,28 +506,47 @@ public class Semantico implements Constants {
 			throw new SemanticError("Erro na linha " + token.getLine()
 					+ " - identificador " + id + " não declarado.");
 		}
-		
+
 		TipoDado tipo1 = pilhaTipos.pop();
 		TipoDado tipo2 = tabelaSimbolos.get(id);
-		
-		if(tipo1 != tipo2){
+
+		if (tipo1 != tipo2) {
 			throw new SemanticError("Erro na linha " + token.getLine()
 					+ " - tipos incompativeis na atribuição.");
 		}
-		
+
 		appendln("     stloc " + id);
 	}
 
+	// TODO atribuir valor nas descrições
 	private void action30() {
 	}
 
-	private void action31() {
+	// inicio do if
+	private void action31(Token token) throws SemanticError {
+		TipoDado tipo = pilhaTipos.pop();
+		if (tipo != TipoDado.CTE_BOOLEAN) {
+			throw new SemanticError("Erro na linha " + token.getLine()
+					+ " - esperado expressão boleana.");
+		}
+
+		
+		String rotuloFalse = getNextRotulo();
+		pilhaRotulos.push(rotuloFalse);
+		appendln("     brfalse " + rotuloFalse);
 	}
 
 	private void action32() {
+		String rotuloFinal = pilhaRotulos.pop();
+		appendln("  " + rotuloFinal + ":");
 	}
 
 	private void action33() {
+		String rotuloFalse = pilhaRotulos.pop();
+		String rotuloFinal = getNextRotulo();
+		pilhaRotulos.push(rotuloFinal);
+		appendln("     br " + rotuloFinal);
+		appendln("  " + rotuloFalse + ":");
 	}
 
 	private void action34() {
