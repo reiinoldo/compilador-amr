@@ -15,7 +15,8 @@ public class Semantico implements Constants {
 	private Map<String, TipoDado> tabelaSimbolos;
 	private List<String> listaId;
 	private Stack<String> pilhaRotulos;
-	
+	private TipoDado tipoAtual;
+
 	private Token tokenRelacional = null;
 
 	public Semantico(String fileName) {
@@ -107,6 +108,42 @@ public class Semantico implements Constants {
 			break;
 		case 23:
 			action23();
+			break;
+		case 24:
+			action24(token);
+			break;
+		case 25:
+			action25(token);
+			break;
+		case 26:
+			action26(token);
+			break;
+		case 27:
+			action27(token);
+			break;
+		case 28:
+			action28(token);
+			break;
+		case 29:
+			action29();
+			break;
+		case 30:
+			action30();
+			break;
+		case 31:
+			action31();
+			break;
+		case 32:
+			action32();
+			break;
+		case 33:
+			action33();
+			break;
+		case 34:
+			action34();
+			break;
+		case 35:
+			action35();
 			break;
 		default:
 			break;
@@ -336,11 +373,11 @@ public class Semantico implements Constants {
 	}
 
 	// aplicar operador relacional
-	private void action21(Token token) throws SemanticError {		
+	private void action21(Token token) throws SemanticError {
 		TipoDado tipo1 = pilhaTipos.pop();
 		TipoDado tipo2 = pilhaTipos.pop();
-		//Validação se um tipo for string os dois deverão ser string
-		if ((tipo1 == TipoDado.CTE_STRING) || (tipo2 == TipoDado.CTE_STRING)){
+		// Validação se um tipo for string os dois deverão ser string
+		if ((tipo1 == TipoDado.CTE_STRING) || (tipo2 == TipoDado.CTE_STRING)) {
 			if (tipo1 != TipoDado.CTE_STRING) {
 				throw new SemanticError(token.getLine(), tipo1.getNome(),
 						TipoDado.CTE_STRING.getNome());
@@ -376,7 +413,7 @@ public class Semantico implements Constants {
 			appendln("     ceq");
 			break;
 		}
-		
+
 	}
 
 	private void action22(Token token) {
@@ -386,5 +423,94 @@ public class Semantico implements Constants {
 
 	// A VERIFICAR
 	private void action23() {
+	}
+
+	// EMPILHA TIPO DE DADOS PARA DECLARAÇÃO
+	private void action24(Token token) {
+		tipoAtual = TipoDado.getTipoPorTipo(token.getLexeme());
+	}
+
+	// adiciona o identificado na listaID
+	private void action25(Token token) throws SemanticError {
+		listaId.add(token.getLexeme());
+	}
+
+	// verifica se identificadores já estão declarados.
+	private void action26(Token token) {
+		for (int i = 0; i < listaId.size(); i++) {
+			String identificador = listaId.get(i);
+			if (tabelaSimbolos.containsKey(identificador)) {
+				new SemanticError("Erro na linha: " + token.getLine()
+						+ " - identificador " + identificador + "já declarado.");
+			}
+			tabelaSimbolos.put(identificador, tipoAtual);
+			appendln("     .locals(" + tipoAtual.getTipoDotNet() + " "
+					+ identificador + ")");
+		}
+		listaId = new ArrayList<String>();
+	}
+
+	// comando SCAN
+	private void action27(Token token) throws SemanticError {
+		for (String id : listaId) {
+			if (!tabelaSimbolos.containsKey(id)) {
+				throw new SemanticError("Erro na linha " + token.getLine()
+						+ " - identificador " + id + " não declarado.");
+			}
+
+			TipoDado tipo = tabelaSimbolos.get(id);
+
+			appendln("     call string [mscorlib]System.Console::ReadLine()");
+			switch (tipo) {
+			case CTE_BOOLEAN:
+				appendln("     call bool [mscorlib]System.Boolean::Parse(string)");
+				break;
+			case CTE_FLOAT:
+				appendln("     call float64 [mscorlib]System.Float64::Parse(string)");
+				break;
+			case CTE_INTEGER:
+				appendln("     call int64 [mscorlib]System.Int64::Parse(string)");
+				break;
+			default:
+				break;
+			}
+			appendln("     stloc " + id);
+		}
+		listaId = new ArrayList<String>();
+	}
+
+	// imprimir identificadores
+	private void action28(Token token) throws SemanticError {
+		String id = token.getLexeme();
+		if (!tabelaSimbolos.containsKey(id)) {
+			throw new SemanticError("Erro na linha " + token.getLine()
+					+ " - identificador " + id + " não declarado.");
+		}
+		TipoDado tipo = tabelaSimbolos.get(id);
+		pilhaTipos.push(tipo);
+
+		appendln("     ldloc " + id);
+	}
+
+	private void action29() {
+		
+	}
+
+	private void action30() {
+	}
+
+	private void action31() {
+	}
+
+	private void action32() {
+	}
+
+	private void action33() {
+	}
+
+	private void action34() {
+	}
+
+	private void action35() {
 	}
 }
