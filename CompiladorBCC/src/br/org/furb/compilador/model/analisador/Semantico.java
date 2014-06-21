@@ -125,7 +125,7 @@ public class Semantico implements Constants {
 			action28(token);
 			break;
 		case 29:
-			action29();
+			action29(token);
 			break;
 		case 30:
 			action30();
@@ -492,8 +492,23 @@ public class Semantico implements Constants {
 		appendln("     ldloc " + id);
 	}
 
-	private void action29() {
+	// atribuição
+	private void action29(Token token) throws SemanticError {
+		String id = listaId.remove(0);
+		if (!tabelaSimbolos.containsKey(id)) {
+			throw new SemanticError("Erro na linha " + token.getLine()
+					+ " - identificador " + id + " não declarado.");
+		}
 		
+		TipoDado tipo1 = pilhaTipos.pop();
+		TipoDado tipo2 = tabelaSimbolos.get(id);
+		
+		if(tipo1 != tipo2){
+			throw new SemanticError("Erro na linha " + token.getLine()
+					+ " - tipos incompativeis na atribuição.");
+		}
+		
+		appendln("     stloc " + id);
 	}
 
 	private void action30() {
