@@ -30,6 +30,30 @@ public class CompiladorController {
 		try {
 			sintatico.parse(lexico, semantico);
 
+			return "programa compilado com sucesso";
+		} catch (LexicalError e) {
+			return e.getMessage();
+		} catch (SemanticError e) {
+			return e.getMessage();
+		} catch (SyntaticError e) {
+			return e.getMessage();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Erro ao compilar: " + e.getMessage();
+		} finally {
+			System.out.println(semantico.getCodigo());
+		}
+	}
+
+	public String gerarCodigo(String texto) {
+		Lexico lexico = new Lexico();
+		lexico.setInput(texto);
+		Sintatico sintatico = new Sintatico();
+		Semantico semantico = new Semantico(fileName);
+
+		try {
+			sintatico.parse(lexico, semantico);
+
 			compilarIlasm(semantico.getCodigo());
 
 			return "programa compilado com sucesso";

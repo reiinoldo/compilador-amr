@@ -101,21 +101,21 @@ public class PrincipalView extends JFrame {
 	}
 
 	private void btnCompilarEvt() {
+		compilador = new CompiladorController("Compilador",	"Compilador");
+		textAreaMensagens.setText(compilador.compilar(textAreaCodigo.getText()
+				.toString()));
+	}
 
+	private void btnGerarCodigoEvt() {
 		btnSalvarEvt();
 
 		if (fileName != null) {
 
 			compilador = new CompiladorController(
 					FileUtil.getFileName(fileName), pathFile);
-			textAreaMensagens.setText(compilador.compilar(textAreaCodigo
+			textAreaMensagens.setText(compilador.gerarCodigo(textAreaCodigo
 					.getText().toString()));
 		}
-	}
-
-	private void btnGerarCodigoEvt() {
-		textAreaMensagens
-				.setText("Geração de código ainda não foi implementada");
 	}
 
 	private void btnEquipeEvt() {
