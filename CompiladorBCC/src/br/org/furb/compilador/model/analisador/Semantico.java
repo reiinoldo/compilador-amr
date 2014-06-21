@@ -15,6 +15,8 @@ public class Semantico implements Constants {
 	private Map<String, TipoDado> tabelaSimbolos;
 	private List<String> listaId;
 	private Stack<String> pilhaRotulos;
+	
+	private Token tokenRelacional = null;
 
 	public Semantico(String fileName) {
 		this.fileName = fileName;
@@ -35,6 +37,7 @@ public class Semantico implements Constants {
 
 	public void executeAction(int action, Token token) throws SemanticError {
 		System.out.println("Ação #" + action + ", Token: " + token);
+
 		switch (action) {
 		case 1:
 			action1(token);
@@ -94,10 +97,10 @@ public class Semantico implements Constants {
 			action19(token);
 			break;
 		case 20:
-			action20();
+			action20(token);
 			break;
 		case 21:
-			action21();
+			action21(token);
 			break;
 		case 22:
 			action22(token);
@@ -203,7 +206,7 @@ public class Semantico implements Constants {
 	// carrega constante float
 	private void action6(Token token) {
 		pilhaTipos.push(token.getTipo());
-		appendln("     ldc.r8 " + token.getLexeme());
+		appendln("     ldc.r8 " + token.getLexeme().replace(",", "."));
 	}
 
 	// inveter sinal
@@ -327,12 +330,42 @@ public class Semantico implements Constants {
 		appendln("     and");
 	}
 
-	private void action20() {
-
+	// guardar operador relacional
+	private void action20(Token token) {
+		tokenRelacional = token;
 	}
 
-	private void action21() {
-
+	// aplicar operador relacional
+	private void action21(Token token) throws SemanticError {
+		pilhaTipos.pop();
+		pilhaTipos.pop();
+		pilhaTipos.push(TipoDado.CTE_BOOLEAN);
+		switch (tokenRelacional.getLexeme()) {
+		case "==":
+			appendln("     ceq");
+			break;
+		case "!=":
+			appendln("     ceq");
+			action13(token);
+			break;
+		case ">":
+			appendln("     cgt");
+			break;
+		case "<":
+			appendln("     clt");
+			break;
+		case "<=":
+			appendln("     cgt");
+			appendln("     ldc.i4 0");
+			appendln("     ceq");
+			break;
+		case ">=":
+			appendln("     clt");
+			appendln("     ldc.i4 0");
+			appendln("     ceq");
+			break;
+		}
+		
 	}
 
 	private void action22(Token token) {
@@ -340,6 +373,7 @@ public class Semantico implements Constants {
 		appendln("     ldstr " + token.getLexeme());
 	}
 
+	// A VERIFICAR
 	private void action23() {
 	}
 }

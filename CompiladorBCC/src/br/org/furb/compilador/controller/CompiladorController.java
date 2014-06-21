@@ -42,8 +42,9 @@ public class CompiladorController {
 		} catch (BuildException e) {
 			return "Erro ao compilar com o ilasm.exe: " + e.getMessage();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return "Erro ao compilar: " + e.getMessage();
-		} finally{
+		} finally {
 			System.out.println(semantico.getCodigo());
 		}
 	}
