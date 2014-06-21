@@ -336,9 +336,20 @@ public class Semantico implements Constants {
 	}
 
 	// aplicar operador relacional
-	private void action21(Token token) throws SemanticError {
-		pilhaTipos.pop();
-		pilhaTipos.pop();
+	private void action21(Token token) throws SemanticError {		
+		TipoDado tipo1 = pilhaTipos.pop();
+		TipoDado tipo2 = pilhaTipos.pop();
+		//Validação se um tipo for string os dois deverão ser string
+		if ((tipo1 == TipoDado.CTE_STRING) || (tipo2 == TipoDado.CTE_STRING)){
+			if (tipo1 != TipoDado.CTE_STRING) {
+				throw new SemanticError(token.getLine(), tipo1.getNome(),
+						TipoDado.CTE_STRING.getNome());
+			}
+			if (tipo2 != TipoDado.CTE_STRING) {
+				throw new SemanticError(token.getLine(), tipo2.getNome(),
+						TipoDado.CTE_STRING.getNome());
+			}
+		}
 		pilhaTipos.push(TipoDado.CTE_BOOLEAN);
 		switch (tokenRelacional.getLexeme()) {
 		case "==":
