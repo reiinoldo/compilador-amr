@@ -135,7 +135,7 @@ public class Semantico implements Constants {
 			action29(token);
 			break;
 		case 30:
-			action30();
+			action30(token);
 			break;
 		case 31:
 			action31(token);
@@ -454,7 +454,6 @@ public class Semantico implements Constants {
 			appendln("     .locals(" + tipoAtual.getTipoDotNet() + " "
 					+ identificador + ")");
 		}
-		listaId = new ArrayList<String>();
 	}
 
 	// comando SCAN
@@ -518,8 +517,29 @@ public class Semantico implements Constants {
 		appendln("     stloc " + id);
 	}
 
-	// TODO atribuir valor nas descrições
-	private void action30() {
+	// atribuir valor nas variaveis
+	private void action30(Token token) throws SemanticError {
+		TipoDado tipo = token.getTipo();
+		if (tipo != TipoDado.NAO_IDENTIFICADO) {
+			for (String id : listaId) {
+				switch(tipo){
+				case CTE_BOOLEAN:
+					break;
+				case CTE_FLOAT:
+					break;
+				case CTE_INTEGER:
+					break;
+				case CTE_STRING:
+					break;
+				default:
+					break;				
+				}
+				pilhaTipos.push(tabelaSimbolos.get(id));
+				action29(token);
+			}
+		}
+
+		listaId = new ArrayList<String>();
 	}
 
 	// inicio do if
@@ -530,7 +550,6 @@ public class Semantico implements Constants {
 					+ " - esperado expressão boleana.");
 		}
 
-		
 		String rotuloFalse = getNextRotulo();
 		pilhaRotulos.push(rotuloFalse);
 		appendln("     brfalse " + rotuloFalse);
@@ -565,7 +584,7 @@ public class Semantico implements Constants {
 			throw new SemanticError("Erro na linha " + token.getLine()
 					+ " - esperado expressão boleana.");
 		}
-		
-		appendln("     brtrue "+pilhaRotulos.pop());
+
+		appendln("     brtrue " + pilhaRotulos.pop());
 	}
 }

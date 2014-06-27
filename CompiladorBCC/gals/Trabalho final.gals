@@ -121,11 +121,11 @@ pr_return = identificador: "return"
 #Grammar
 <programa> ::= #15 pr_main <var_glob> <lista_mod> <lista_cmd> pr_end #16;
 <var_glob> ::= î | pr_global <variaveis> <var_glob> ;
-<variaveis>::= <tipo> #24 <lista_id> #26 <valor> ";" ;
+<variaveis>::= <tipo> #24 <lista_id> #26 <valor> #30 ";" ;
 <tipo> ::= pr_boolean | pr_float | pr_integer | pr_string ;
 <lista_id> ::= identificador #25 <lista_id1> ;
 <lista_id1> ::= î | "," <lista_id> ;
-<valor> ::= î | "=" <constante> #30 ;
+<valor> ::= î  | "=" <constante> ;
 <constante> ::= const_integer | const_float | const_string | <const_boolean> ;
 <const_boolean> ::= pr_true | pr_false ;
 <lista_mod> ::= î | <modulo> <lista_mod> ;
