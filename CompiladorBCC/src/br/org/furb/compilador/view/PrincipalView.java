@@ -47,7 +47,6 @@ import br.org.furb.compilador.util.FileUtil;
 
 public class PrincipalView extends JFrame {
 
-	// decvar
 	private static final long serialVersionUID = -2529644283675445941L;
 	private JPanel panelStatus;
 	private JLabel lblStatus;
@@ -90,10 +89,8 @@ public class PrincipalView extends JFrame {
 							+ "\n");
 				}
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
