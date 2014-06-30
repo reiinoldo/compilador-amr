@@ -132,7 +132,7 @@ public class Semantico implements Constants {
 			action28(token);
 			break;
 		case 29:
-			action29(token);
+			action29(token, null);
 			break;
 		case 30:
 			action30(token);
@@ -423,12 +423,13 @@ public class Semantico implements Constants {
 
 	}
 
+	// empilha string
 	private void action22(Token token) {
 		pilhaTipos.push(token.getTipo());
 		appendln("     ldstr " + token.getLexeme());
 	}
 
-	// A VERIFICAR
+	// TODO A VERIFICAR
 	private void action23() {
 	}
 
@@ -499,8 +500,10 @@ public class Semantico implements Constants {
 	}
 
 	// atribuição
-	private void action29(Token token) throws SemanticError {
-		String id = listaId.remove(0);
+	private void action29(Token token, String id) throws SemanticError {
+		if (id == null) {
+			id = listaId.remove(0);
+		}
 		if (!tabelaSimbolos.containsKey(id)) {
 			throw new SemanticError("Erro na linha " + token.getLine()
 					+ " - identificador " + id + " não declarado.");
@@ -517,25 +520,33 @@ public class Semantico implements Constants {
 		appendln("     stloc " + id);
 	}
 
-	// atribuir valor nas variaveis
+	// atribuir valor nas variaveis na decaração
 	private void action30(Token token) throws SemanticError {
 		TipoDado tipo = token.getTipo();
-		if (tipo != TipoDado.NAO_IDENTIFICADO) {
+		boolean trueOrFalse = token.getLexeme().equalsIgnoreCase("true") ||  token.getLexeme().equalsIgnoreCase("false");
+		if ((tipo != TipoDado.NAO_IDENTIFICADO) || (trueOrFalse)) {
 			for (String id : listaId) {
-				switch(tipo){
-				case CTE_BOOLEAN:
-					break;
+				switch (tipo) {
 				case CTE_FLOAT:
+					action6(token);
 					break;
 				case CTE_INTEGER:
+					action5(token);
 					break;
 				case CTE_STRING:
+					action22(token);
 					break;
 				default:
-					break;				
+					if(trueOrFalse){
+						if(token.getLexeme().equalsIgnoreCase("true")){
+							action11();
+						} else {
+							action12();
+						}
+					}
+					break;
 				}
-				pilhaTipos.push(tabelaSimbolos.get(id));
-				action29(token);
+				action29(token, id);
 			}
 		}
 
