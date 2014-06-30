@@ -51,8 +51,7 @@ public class PrincipalView extends JFrame {
 	private JPanel panelStatus;
 	private JLabel lblStatus;
 	private JTextArea textAreaCodigo, textAreaMensagens;
-	private JButton btnNovo, btnAbrir, btnSalvar, btnCopiar, btnColar,
-			btnRecortar, btnCompilar, btnGerarCodigo, btnEquipe;
+	private JButton btnNovo, btnAbrir, btnSalvar, btnCopiar, btnColar, btnRecortar, btnCompilar, btnGerarCodigo, btnEquipe;
 	private String pathFile;
 	private String fileName;
 	private CompiladorController compilador;
@@ -67,26 +66,22 @@ public class PrincipalView extends JFrame {
 
 	private void btnAbrirEvt() {
 		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setCurrentDirectory(new File(System
-				.getProperty("user.home")));
+		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 		int result = fileChooser.showOpenDialog(this);
 
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = fileChooser.getSelectedFile();
 			setTitle("Compilador | Arquivo: " + selectedFile.getAbsolutePath());
-			lblStatus.setText(selectedFile.getAbsolutePath()
-					+ " | Não modificado");
+			lblStatus.setText(selectedFile.getAbsolutePath() + " | Não modificado");
 			pathFile = selectedFile.getAbsolutePath();
 
 			BufferedReader reader;
 			try {
-				reader = new BufferedReader(new FileReader(
-						selectedFile.toString()));
+				reader = new BufferedReader(new FileReader(selectedFile.toString()));
 				String line = null;
 				textAreaCodigo.setText("");
 				while ((line = reader.readLine()) != null) {
-					textAreaCodigo.setText(textAreaCodigo.getText() + line
-							+ "\n");
+					textAreaCodigo.setText(textAreaCodigo.getText() + line + "\n");
 				}
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -98,9 +93,8 @@ public class PrincipalView extends JFrame {
 	}
 
 	private void btnCompilarEvt() {
-		compilador = new CompiladorController("Compilador",	"Compilador");
-		textAreaMensagens.setText(compilador.compilar(textAreaCodigo.getText()
-				.toString()));
+		compilador = new CompiladorController("Compilador", "Compilador");
+		textAreaMensagens.setText(compilador.compilar(textAreaCodigo.getText().toString()));
 	}
 
 	private void btnGerarCodigoEvt() {
@@ -108,37 +102,27 @@ public class PrincipalView extends JFrame {
 
 		if (fileName != null) {
 
-			compilador = new CompiladorController(
-					FileUtil.getFileName(fileName), pathFile);
-			textAreaMensagens.setText(compilador.gerarCodigo(textAreaCodigo
-					.getText().toString()));
+			compilador = new CompiladorController(FileUtil.getFileName(fileName), pathFile);
+			textAreaMensagens.setText(compilador.gerarCodigo(textAreaCodigo.getText().toString()));
 		}
 	}
 
 	private void btnEquipeEvt() {
-		textAreaMensagens.setText("André Vinícius Bampi \n"
-				+ "Maicon Machado Gerardi da Silva \n"
-				+ "Reinoldo Krause Junior");
+		textAreaMensagens.setText("André Vinícius Bampi \n" + "Maicon Machado Gerardi da Silva \n" + "Reinoldo Krause Junior");
 	}
 
 	private void btnCopiarEvt() {
 		if (textAreaCodigo.getSelectedText() != null) {
-			StringSelection selection = new StringSelection(textAreaCodigo
-					.getSelectedText().toString());
-			Clipboard clipboard = Toolkit.getDefaultToolkit()
-					.getSystemClipboard();
+			StringSelection selection = new StringSelection(textAreaCodigo.getSelectedText().toString());
+			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 			clipboard.setContents(selection, selection);
 		}
 	}
 
 	private void btnColarEvt() {
 		String str = getClipboardContents();
-		textAreaCodigo.setText(textAreaCodigo.getText().toString()
-				.substring(0, textAreaCodigo.getCaretPosition())
-				+ ""
-				+ str
-				+ textAreaCodigo.getText().toString()
-						.substring(textAreaCodigo.getCaretPosition()));
+		textAreaCodigo.setText(textAreaCodigo.getText().toString().substring(0, textAreaCodigo.getCaretPosition()) + "" + str
+				+ textAreaCodigo.getText().toString().substring(textAreaCodigo.getCaretPosition()));
 	}
 
 	private void btnRecortarEvt() {
@@ -156,16 +140,13 @@ public class PrincipalView extends JFrame {
 			lblStatus.setText(pathFile + " | Não modificado");
 		} else {
 			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.setCurrentDirectory(new File(System
-					.getProperty("user.home")));
+			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 			int result = fileChooser.showSaveDialog(this);
 
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = fileChooser.getSelectedFile();
-				setTitle("Compilador | Arquivo: "
-						+ selectedFile.getAbsolutePath());
-				lblStatus.setText(selectedFile.getAbsolutePath()
-						+ " | Não modificado");
+				setTitle("Compilador | Arquivo: " + selectedFile.getAbsolutePath());
+				lblStatus.setText(selectedFile.getAbsolutePath() + " | Não modificado");
 				pathFile = selectedFile.getAbsolutePath();
 				try {
 					gravarNoArquivo();
@@ -191,12 +172,10 @@ public class PrincipalView extends JFrame {
 		String result = "";
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		Transferable contents = clipboard.getContents(null);
-		boolean hasTransferableText = (contents != null)
-				&& contents.isDataFlavorSupported(DataFlavor.stringFlavor);
+		boolean hasTransferableText = (contents != null) && contents.isDataFlavorSupported(DataFlavor.stringFlavor);
 		if (hasTransferableText) {
 			try {
-				result = (String) contents
-						.getTransferData(DataFlavor.stringFlavor);
+				result = (String) contents.getTransferData(DataFlavor.stringFlavor);
 			} catch (Exception ex) {
 				System.out.println(ex);
 				ex.printStackTrace();
@@ -212,8 +191,7 @@ public class PrincipalView extends JFrame {
 		ActionMap actionMap = this.rootPane.getActionMap();
 		actionMap.put(btn.getText(), actBtn);
 
-		InputMap imap = this.rootPane
-				.getInputMap(JRootPane.WHEN_IN_FOCUSED_WINDOW);
+		InputMap imap = this.rootPane.getInputMap(JRootPane.WHEN_IN_FOCUSED_WINDOW);
 		imap.put(evento, btn.getText());
 	}
 
@@ -245,8 +223,7 @@ public class PrincipalView extends JFrame {
 		gridBagLayout.columnWidths = new int[] { 784, };
 		gridBagLayout.rowHeights = new int[] { 71, 467, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 1.0 };
-		gridBagLayout.rowWeights = new double[] { 0.0, 1.0, 0.0,
-				Double.MIN_VALUE };
+		gridBagLayout.rowWeights = new double[] { 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 
 		JPanel panel = new JPanel();
@@ -259,63 +236,53 @@ public class PrincipalView extends JFrame {
 
 		getContentPane().add(panel, gbc_panel);
 
-		String valorPadraoTexto = "<html><div style=\"text-align:center\"><br /><img src="
-				+ "file:img/%s" + "/><br />%s<br /></div></html>";
+		String valorPadraoTexto = "<html><div style=\"text-align:center\"><br /><img src=" + "file:img/%s" + "/><br />%s<br /></div></html>";
 
 		Font fontButtonsHeader = new Font("Arial", 1, 10);
 
 		btnNovo = new JButton();
 		btnNovo.setFont(fontButtonsHeader);
-		btnNovo.setText(String.format(valorPadraoTexto, "novo.png",
-				"novo [ctrl-n]"));
+		btnNovo.setText(String.format(valorPadraoTexto, "novo.png", "novo [ctrl-n]"));
 		btnNovo.setPreferredSize(new Dimension(80, 75));
 
 		btnAbrir = new JButton();
 		btnAbrir.setFont(fontButtonsHeader);
-		btnAbrir.setText(String.format(valorPadraoTexto, "open.png",
-				"abrir [ctrl-a]"));
+		btnAbrir.setText(String.format(valorPadraoTexto, "open.png", "abrir [ctrl-a]"));
 		btnAbrir.setPreferredSize(new Dimension(80, 75));
 
 		btnSalvar = new JButton();
 		btnSalvar.setFont(fontButtonsHeader);
-		btnSalvar.setText(String.format(valorPadraoTexto, "save.png",
-				"salvar [ctrl-s]"));
+		btnSalvar.setText(String.format(valorPadraoTexto, "save.png", "salvar [ctrl-s]"));
 		btnSalvar.setPreferredSize(new Dimension(80, 75));
 
 		btnCopiar = new JButton();
 		btnCopiar.setFont(fontButtonsHeader);
-		btnCopiar.setText(String.format(valorPadraoTexto, "copy.png",
-				"copiar [ctrl-c]"));
+		btnCopiar.setText(String.format(valorPadraoTexto, "copy.png", "copiar [ctrl-c]"));
 		btnCopiar.setPreferredSize(new Dimension(80, 75));
 
 		btnColar = new JButton();
 		btnColar.setFont(fontButtonsHeader);
-		btnColar.setText(String.format(valorPadraoTexto, "paste.png",
-				"colar [ctrl-v]"));
+		btnColar.setText(String.format(valorPadraoTexto, "paste.png", "colar [ctrl-v]"));
 		btnColar.setPreferredSize(new Dimension(80, 75));
 
 		btnRecortar = new JButton();
 		btnRecortar.setFont(fontButtonsHeader);
-		btnRecortar.setText(String.format(valorPadraoTexto, "cut.png",
-				"recortar [ctrl-r]"));
+		btnRecortar.setText(String.format(valorPadraoTexto, "cut.png", "recortar [ctrl-r]"));
 		btnRecortar.setPreferredSize(new Dimension(80, 75));
 
 		btnCompilar = new JButton();
 		btnCompilar.setFont(fontButtonsHeader);
-		btnCompilar.setText(String.format(valorPadraoTexto, "play.png",
-				"compilar [F8]"));
+		btnCompilar.setText(String.format(valorPadraoTexto, "play.png", "compilar [F8]"));
 		btnCompilar.setPreferredSize(new Dimension(80, 75));
 
 		btnGerarCodigo = new JButton();
 		btnGerarCodigo.setFont(fontButtonsHeader);
-		btnGerarCodigo.setText(String.format(valorPadraoTexto, "make.png",
-				"gerar código [F9]"));
+		btnGerarCodigo.setText(String.format(valorPadraoTexto, "make.png", "gerar código [F9]"));
 		btnGerarCodigo.setPreferredSize(new Dimension(80, 75));
 
 		btnEquipe = new JButton();
 		btnEquipe.setFont(fontButtonsHeader);
-		btnEquipe.setText(String.format(valorPadraoTexto, "people.png",
-				"equipe [F1]"));
+		btnEquipe.setText(String.format(valorPadraoTexto, "people.png", "equipe [F1]"));
 		btnEquipe.setPreferredSize(new Dimension(80, 75));
 
 		panel.add(btnNovo);
@@ -339,36 +306,33 @@ public class PrincipalView extends JFrame {
 		getContentPane().add(splitPane, gbc_splitPane);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane
-				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane
-				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		splitPane.setLeftComponent(scrollPane);
 
 		textAreaCodigo = new JTextArea();
 		textAreaCodigo.setFont(new Font("Courier New", Font.PLAIN, 12));
-		textAreaCodigo.getDocument().addDocumentListener(
-				new DocumentListener() {
-					@Override
-					public void removeUpdate(DocumentEvent e) {
-						if (pathFile != null)
-							lblStatus.setText(pathFile + " | Modificado");
-						else
-							lblStatus.setText("Modificado");
-					}
+		textAreaCodigo.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				if (pathFile != null)
+					lblStatus.setText(pathFile + " | Modificado");
+				else
+					lblStatus.setText("Modificado");
+			}
 
-					@Override
-					public void insertUpdate(DocumentEvent e) {
-						if (pathFile != null)
-							lblStatus.setText(pathFile + " | Modificado");
-						else
-							lblStatus.setText("Modificado");
-					}
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				if (pathFile != null)
+					lblStatus.setText(pathFile + " | Modificado");
+				else
+					lblStatus.setText("Modificado");
+			}
 
-					@Override
-					public void changedUpdate(DocumentEvent arg0) {
-					}
-				});
+			@Override
+			public void changedUpdate(DocumentEvent arg0) {
+			}
+		});
 		textAreaCodigo.setText("");
 
 		final JTextArea lines = new JTextArea("01");
@@ -377,16 +341,13 @@ public class PrincipalView extends JFrame {
 		lines.setEditable(false);
 		lines.setFont(new Font("Courier New", Font.PLAIN, 12));
 
-		textAreaCodigo.getDocument().addDocumentListener(
-				listnerLineNumbers(textAreaCodigo, lines));
+		textAreaCodigo.getDocument().addDocumentListener(listnerLineNumbers(textAreaCodigo, lines));
 
 		scrollPane.setViewportView(textAreaCodigo);
 		scrollPane.setRowHeaderView(lines);
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1
-				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane_1
-				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		splitPane.setRightComponent(scrollPane_1);
 
 		splitPane.setDividerLocation(370);
@@ -410,16 +371,14 @@ public class PrincipalView extends JFrame {
 				btnNovoEvt();
 			}
 		});
-		addAtalho(btnNovo,
-				KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_MASK));
+		addAtalho(btnNovo, KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_MASK));
 
 		btnAbrir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnAbrirEvt();
 			}
 		});
-		addAtalho(btnAbrir,
-				KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK));
+		addAtalho(btnAbrir, KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK));
 
 		btnCompilar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -447,39 +406,36 @@ public class PrincipalView extends JFrame {
 				btnCopiarEvt();
 			}
 		});
-		addAtalho(btnCopiar,
-				KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_MASK));
+		addAtalho(btnCopiar, KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_MASK));
 
 		btnColar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnColarEvt();
 			}
 		});
-		addAtalho(btnRecortar,
-				KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_MASK));
+		addAtalho(btnRecortar, KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_MASK));
 
 		btnRecortar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnRecortarEvt();
 			}
 		});
-		addAtalho(btnRecortar,
-				KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_MASK));
+		addAtalho(btnRecortar, KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_MASK));
 
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				btnSalvarEvt();
 			}
 		});
-		addAtalho(btnSalvar,
-				KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK));
+		addAtalho(btnSalvar, KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK));
 
-		textAreaCodigo.getInputMap().put(
-				KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK),
-				"Nothing");
+		textAreaCodigo.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK), "Nothing");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("Compilador");
+
+		setIconImage(Toolkit.getDefaultToolkit().getImage(PrincipalView.class.getResource("/br/org/furb/compilador/view/iconx.png")));
 		setVisible(true);
+		pack();
 	}
 
 	/**
@@ -488,8 +444,7 @@ public class PrincipalView extends JFrame {
 	 * @param lines
 	 * @return
 	 */
-	private DocumentListener listnerLineNumbers(final JTextArea jta,
-			final JTextArea lines) {
+	private DocumentListener listnerLineNumbers(final JTextArea jta, final JTextArea lines) {
 		return new DocumentListener() {
 			public String getText() {
 				int caretPosition = jta.getDocument().getLength();
