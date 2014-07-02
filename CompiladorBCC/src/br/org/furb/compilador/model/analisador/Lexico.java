@@ -50,7 +50,7 @@ public class Lexico implements Constants
             lastState = state;
             carac = nextChar();
             state = nextState(carac, state);
-
+                        
             if (state < 0)
                 break;
 
@@ -58,12 +58,14 @@ public class Lexico implements Constants
             {
                 if (tokenForState(state) >= 0)
                 {
-                	if (carac == '\n')
-                    	line++;
-                    endState = state;
+                	endState = state;
                     end = position;
                 }
             }
+            
+            if (carac == '\n')
+            	line++;
+
         }
         if (endState < 0 || (endState != state && tokenForState(lastState) == -2)){        	
             //throw new LexicalError(SCANNER_ERROR[lastState], line);
