@@ -473,7 +473,7 @@ public class Semantico implements Constants {
 				appendln("     call bool [mscorlib]System.Boolean::Parse(string)");
 				break;
 			case CTE_FLOAT:
-				appendln("     call float64 [mscorlib]System.Float64::Parse(string)");
+				appendln("     call float64 [mscorlib]System.Double::Parse(string)");
 				break;
 			case CTE_INTEGER:
 				appendln("     call int64 [mscorlib]System.Int64::Parse(string)");
