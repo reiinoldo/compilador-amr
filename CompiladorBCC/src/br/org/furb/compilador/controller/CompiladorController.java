@@ -65,7 +65,7 @@ public class CompiladorController {
 			e.printStackTrace();
 			return "Erro ao compilar: " + e.getMessage();
 		} finally {
-			System.out.println(semantico.getCodigo());
+			//			System.out.println(semantico.getCodigo());
 		}
 	}
 
