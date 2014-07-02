@@ -10,8 +10,6 @@ import br.org.furb.compilador.util.FileUtil;
 import br.org.ilasm.IlasmBuilder;
 import br.org.ilasm.exception.BuildException;
 
-//import br.org.furb.compilador.util.StringUtil;
-
 public class CompiladorController {
 	private String fileName;
 	private String pathFile;
@@ -40,8 +38,6 @@ public class CompiladorController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "Erro ao compilar: " + e.getMessage();
-		} finally {
-			System.out.println(semantico.getCodigo());
 		}
 	}
 
@@ -73,86 +69,10 @@ public class CompiladorController {
 		}
 	}
 
-	private void compilarIlasm(String codigoGerado) throws BuildException,
-			Exception {
-		String objFilePath = FileUtil.writeFile(codigoGerado, pathFile,
-				fileName);
-		IlasmBuilder
-				.setPathFileIlasm("C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\ilasm.exe");
+	private void compilarIlasm(String codigoGerado) throws BuildException, Exception {
+		String objFilePath = FileUtil.writeFile(codigoGerado, pathFile, fileName);
+		IlasmBuilder.setPathFileIlasm("C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\ilasm.exe");
 		IlasmBuilder.setPathFileBuild(pathFile);
 		IlasmBuilder.buildAndExecuteAskingIlasm(objFilePath);
 	}
-
-	// public String compilar(String texto) {
-	// String result;
-	//
-	// if (texto.isEmpty() || texto.trim().equals("")) {
-	// result = "Nenhum programa para compilar!";
-	// } else {
-	//
-	// result = analisadorLexico(texto);
-	//
-	// // ** Caso não apresente erros ("") faz a análise sintática ** //
-	// if (result.equals(""))
-	// result = analisadorSintatico(texto);
-	//
-	// }
-	//
-	// if (result.equals(""))
-	// result = "     programa compilado com sucesso";
-	//
-	// return result;
-	// }
-	//
-	//
-	//
-	// private String analisadorLexico(String texto) {
-	// Lexico lexico = new Lexico();
-	// String msgToken = "";
-	// Token token = null;
-	//
-	// lexico.setInput(texto);
-	//
-	// try {
-	// /*
-	// * ** Especificação do trabalho 3 ** Não deve ser mostrado as
-	// * mensagens do léxico ** Apenas será mostrado caso cotenha erro
-	// *
-	// * msgToken = StringUtil.completaASC("linha", " ", 8) +
-	// * StringUtil.completaASC("classe", " ", 22) + "lexema\n";
-	// */
-	//
-	// while ((token = lexico.nextToken()) != null) {
-	// msgToken = msgToken + token.toString() + "\n";
-	// }
-	//
-	// // return msgToken + "\n" + "     programa compilado com sucesso";
-	// return "";
-	//
-	// } catch (LexicalError e) {
-	// return e.getMessage();
-	// }
-	// }
-	//
-	// private String analisadorSintatico(String texto) {
-	// Semantico semantico = new Semantico(fileName);
-	// Sintatico sintatico = new Sintatico();
-	// Lexico lexico = new Lexico();
-	// lexico.setInput(texto);
-	//
-	// try {
-	//
-	// sintatico.parse(lexico, semantico);
-	//
-	// return "";
-	//
-	// } catch (LexicalError e) {
-	// return e.getMessage();
-	// } catch (SemanticError e) {
-	// return e.getMessage();
-	// } catch (SyntaticError e) {
-	// return e.getMessage();
-	// }
-	// }
-
 }
