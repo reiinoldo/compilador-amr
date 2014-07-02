@@ -44,7 +44,7 @@ public class Semantico implements Constants {
 	}
 
 	public void executeAction(int action, Token token) throws SemanticError {
-		System.out.println("Ação #" + action + ", Token: " + token);
+//		System.out.println("Ação #" + action + ", Token: " + token);
 
 		switch (action) {
 		case 1:
@@ -114,7 +114,7 @@ public class Semantico implements Constants {
 			action22(token);
 			break;
 		case 23:
-			action23();
+			action23(token);
 			break;
 		case 24:
 			action24(token);
@@ -429,8 +429,13 @@ public class Semantico implements Constants {
 		appendln("     ldstr " + token.getLexeme());
 	}
 
-	// TODO A VERIFICAR
-	private void action23() {
+	// verificar +String ou +Boolean
+	private void action23(Token token) throws SemanticError {
+		if (!(token.getTipo() == TipoDado.CTE_FLOAT || token.getTipo() == TipoDado.CTE_INTEGER)) {
+			throw new SemanticError(token.getLine(), token.getLexeme(),
+					TipoDado.CTE_INTEGER.getTipo() + " ou "
+							+ TipoDado.CTE_FLOAT.getTipo());
+		}
 	}
 
 	// EMPILHA TIPO DE DADOS PARA DECLARAÇÃO
@@ -523,7 +528,8 @@ public class Semantico implements Constants {
 	// atribuir valor nas variaveis na decaração
 	private void action30(Token token) throws SemanticError {
 		TipoDado tipo = token.getTipo();
-		boolean trueOrFalse = token.getLexeme().equalsIgnoreCase("true") ||  token.getLexeme().equalsIgnoreCase("false");
+		boolean trueOrFalse = token.getLexeme().equalsIgnoreCase("true")
+				|| token.getLexeme().equalsIgnoreCase("false");
 		if ((tipo != TipoDado.NAO_IDENTIFICADO) || (trueOrFalse)) {
 			for (String id : listaId) {
 				switch (tipo) {
@@ -537,8 +543,8 @@ public class Semantico implements Constants {
 					action22(token);
 					break;
 				default:
-					if(trueOrFalse){
-						if(token.getLexeme().equalsIgnoreCase("true")){
+					if (trueOrFalse) {
+						if (token.getLexeme().equalsIgnoreCase("true")) {
 							action11();
 						} else {
 							action12();

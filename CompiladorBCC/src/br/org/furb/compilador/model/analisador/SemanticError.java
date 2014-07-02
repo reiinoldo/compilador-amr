@@ -12,7 +12,7 @@ public class SemanticError extends AnalysisError {
 	}
 
 	public SemanticError(int linha, String encontrado, String esperado) {
-		super("Erro na linha " + linha + " - econtrado " + encontrado
+		super("Erro na linha " + linha + " - encontrado " + encontrado
 				+ " esperado " + esperado);
 	}
 }
