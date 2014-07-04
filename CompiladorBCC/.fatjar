@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Fri Jul 04 03:33:36 GMT-03:00 2014
+onejar.license.required=false
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=compilador.jar
+manifest.mergeall=true
+manifest.mainclass=br.org.furb.compilador.Main
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=
+includes=
