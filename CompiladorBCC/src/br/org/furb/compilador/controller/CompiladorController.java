@@ -11,24 +11,43 @@ import br.org.ilasm.IlasmBuilder;
 import br.org.ilasm.exception.BuildException;
 
 public class CompiladorController {
+	private static final String COMPILADO_COM_SUCESSO = "programa compilado com sucesso";
+
+	private Lexico lexico;
+	private Sintatico sintatico;
+	private Semantico semantico;
+
 	private String fileName;
 	private String pathFile;
 
+	/**
+	 * Construtor para compilar.
+	 */
+	public CompiladorController() {
+		this.lexico = new Lexico();
+		this.sintatico = new Sintatico();
+	}
+
+	/**
+	 * Construtor para compilar e gerar código
+	 * 
+	 * @param fileName
+	 * @param pathFile
+	 */
 	public CompiladorController(String fileName, String pathFile) {
+		this();
 		this.fileName = fileName;
 		this.pathFile = pathFile;
 	}
 
 	public String compilar(String texto) {
-		Lexico lexico = new Lexico();
-		lexico.setInput(texto);
-		Sintatico sintatico = new Sintatico();
-		Semantico semantico = new Semantico(fileName);
+		this.lexico.setInput(texto);
+		this.semantico = new Semantico(fileName);
 
 		try {
-			sintatico.parse(lexico, semantico);
+			this.sintatico.parse(lexico, semantico);
 
-			return "programa compilado com sucesso";
+			return COMPILADO_COM_SUCESSO;
 		} catch (LexicalError e) {
 			return e.getMessage();
 		} catch (SemanticError e) {
@@ -42,36 +61,23 @@ public class CompiladorController {
 	}
 
 	public String gerarCodigo(String texto) {
-		Lexico lexico = new Lexico();
-		lexico.setInput(texto);
-		Sintatico sintatico = new Sintatico();
-		Semantico semantico = new Semantico(fileName);
-
-		try {
-			sintatico.parse(lexico, semantico);
-
-			compilarIlasm(semantico.getCodigo());
-
-			return "programa compilado com sucesso";
-		} catch (LexicalError e) {
-			return e.getMessage();
-		} catch (SemanticError e) {
-			return e.getMessage();
-		} catch (SyntaticError e) {
-			return e.getMessage();
-		} catch (BuildException e) {
-			return "Erro ao compilar com o ilasm.exe: " + e.getMessage();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Erro ao compilar: " + e.getMessage();
-		} finally {
-			//			System.out.println(semantico.getCodigo());
+		String compilacao = this.compilar(texto);
+		if (compilacao.equalsIgnoreCase(COMPILADO_COM_SUCESSO)) {
+			try {
+				compilarIlasm();
+			} catch (BuildException e) {
+				return "Erro ao compilar com o ilasm.exe: " + e.getMessage();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return "Erro ao compilar com o ilasm.exe: " + e.getMessage();
+			}
 		}
+		return compilacao;
 	}
 
-	private void compilarIlasm(String codigoGerado) throws BuildException, Exception {
-		String objFilePath = FileUtil.writeFile(codigoGerado, pathFile, fileName);
-		IlasmBuilder.setPathFileIlasm("C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\ilasm.exe");
+	private void compilarIlasm() throws BuildException, Exception {
+		String objFilePath = FileUtil.writeFile(this.semantico.getCodigo(),
+				pathFile, fileName);
 		IlasmBuilder.setPathFileBuild(pathFile);
 		IlasmBuilder.buildAndExecuteAskingIlasm(objFilePath);
 	}
