@@ -12,6 +12,7 @@ import br.org.ilasm.exception.BuildException;
 
 public class CompiladorController {
 	private static final String COMPILADO_COM_SUCESSO = "programa compilado com sucesso";
+	private static final String CODIGO_GERADO_COM_SUCESSO = "código objeto gerado com sucesso";
 
 	private Lexico lexico;
 	private Sintatico sintatico;
@@ -71,8 +72,10 @@ public class CompiladorController {
 				e.printStackTrace();
 				return "Erro ao compilar com o ilasm.exe: " + e.getMessage();
 			}
+		} else {
+			return compilacao;
 		}
-		return compilacao;
+		return CODIGO_GERADO_COM_SUCESSO;
 	}
 
 	private void compilarIlasm() throws BuildException, Exception {
