@@ -1,0 +1,36 @@
+﻿FURB - Universidade Regional de Blumenau
+Matéria:	Compiladores	
+Semestre: 	2014/01
+Professora: 	Joyce Martins
+Alunos:	André Vinícius Bampi
+	Maicon Machado Gerardi da Silva
+	Reinoldo Krause Junior
+-----------------------------------------
+
+compilador.jar -> Executável
+
+-----------------------------------------
+-------------OBSERVAÇÃO 1----------------
+-----------------------------------------
+- No botão "gerar código", o compilador:
+	- Compila o código fonte
+	- Se compilar corretamente então
+		- Gera o código intermediário para o ilasm.exe no diretório do arquivo fonte, com o seguinte nome: 
+		  NOME_DO_ARQUIVO_FONTE.obj
+		- Solicita o arquivo "ilasm.exe" para o usuário
+		- Se econtrar o arquivo "ilasm.exe" então
+			- Salva o diretório digitado
+			- Gera o arquivo .exe no diretório do arquivo fonte com o seguinte nome:
+			  NOME_DO_ARQUIVO_FONTE.exe
+			- Executa o arquivo .exe gerado
+		- Senão 
+			- mostra mensagem de erro do ilasm na área de mensagens.
+	- Senão 
+		- mostra mensagem de erro do compilador na área de mensagens.
+	
+-----------------------------------------
+-------------OBSERVAÇÃO 2----------------
+-----------------------------------------
+- O compilador irá salvar o último diretório do arquivo ilasm.exe encontrado, 
+ou seja, quando for questionado pela segunda vez, ele trará o ultimo diretório do ilasm.exe válido,
+evitando a digitação o diretório toda vez que é pedido para gerar o código.
